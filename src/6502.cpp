@@ -102,8 +102,8 @@ void CPU::execute(){
         case 0x6D: ADC(_ZPY); break;
         case 0x7D: ADC(_ABX); break;
         case 0x79: ADC(_ABY); break;
-        case 0x61: ADC(_INX); break;
-        case 0x71: ADC(_INY); break;
+        case 0x61: ADC(_IDX); break;
+        case 0x71: ADC(_IDY); break;
 
         case 0x29: AND(_IMM); break;
         case 0x25: AND(_ZPG); break;
@@ -111,8 +111,8 @@ void CPU::execute(){
         case 0x2D: AND(_ABS); break;
         case 0x3D: AND(_ABX); break;
         case 0x39: AND(_ABY); break;
-        case 0x21: AND(_INX); break;
-        case 0x31: AND(_INY); break;
+        case 0x21: AND(_IDX); break;
+        case 0x31: AND(_IDY); break;
 
         case 0x0A: ASL(_ACC); break;
         case 0x06: ASL(_ZPG); break;
@@ -129,8 +129,8 @@ void CPU::execute(){
         case 0xCD: CMP(_ABS); break;
         case 0xDD: CMP(_ABX); break;
         case 0xD9: CMP(_ABY); break;
-        case 0xC1: CMP(_INX); break;
-        case 0xD1: CMP(_INY); break;
+        case 0xC1: CMP(_IDX); break;
+        case 0xD1: CMP(_IDY); break;
 
         case 0xE0: CPX(_IMM); break;
         case 0xE4: CPX(_ZPG); break;
@@ -151,8 +151,8 @@ void CPU::execute(){
         case 0x4D: EOR(_ABS); break;
         case 0x5D: EOR(_ABX); break;
         case 0x59: EOR(_ABY); break;
-        case 0x41: EOR(_INX); break;
-        case 0x51: EOR(_INY); break;
+        case 0x41: EOR(_IDX); break;
+        case 0x51: EOR(_IDY); break;
 
         case 0xE6: INC(_ZPG); break;
         case 0xF6: INC(_ZPX); break;
@@ -168,8 +168,8 @@ void CPU::execute(){
         case 0xAD: LDA(_ABS); break;
         case 0xBD: LDA(_ABX); break;
         case 0xB9: LDA(_ABY); break;
-        case 0xA1: LDA(_INX); break;
-        case 0xB1: LDA(_INY); break;
+        case 0xA1: LDA(_IDX); break;
+        case 0xB1: LDA(_IDY); break;
 
         case 0xA2: LDX(_IMM); break;
         case 0xA6: LDX(_ZPG); break;
@@ -195,8 +195,8 @@ void CPU::execute(){
         case 0x0D: ORA(_ABS); break;
         case 0x1D: ORA(_ABX); break;
         case 0x19: ORA(_ABY); break;
-        case 0x01: ORA(_INX); break;
-        case 0x11: ORA(_INY); break;
+        case 0x01: ORA(_IDX); break;
+        case 0x11: ORA(_IDY); break;
 
         case 0x2A: ROL(_ACC); break;
         case 0x26: ROL(_ZPG); break;
@@ -216,16 +216,16 @@ void CPU::execute(){
         case 0xED: SBC(_ABS); break;
         case 0xFD: SBC(_ABX); break;
         case 0xF9: SBC(_ABY); break;
-        case 0xE1: SBC(_INX); break;
-        case 0xF1: SBC(_INY); break;
+        case 0xE1: SBC(_IDX); break;
+        case 0xF1: SBC(_IDY); break;
 
         case 0x85: STA(_ZPG); break;
         case 0x95: STA(_ZPX); break;
         case 0x8D: STA(_ABS); break;
         case 0x9D: STA(_ABX); break;
         case 0x99: STA(_ABY); break;
-        case 0x81: STA(_INX); break;
-        case 0x91: STA(_INY); break;
+        case 0x81: STA(_IDX); break;
+        case 0x91: STA(_IDY); break;
 
         case 0x86: STX(_ZPG); break;
         case 0x96: STX(_ZPY); break;
@@ -342,13 +342,13 @@ u16 CPU::IND(){
 
 
 // Indirect X
-u16 CPU::INX(){
+u16 CPU::IDX(){
     // TODO
 }
 
 
 // Indirect Y
-u16 CPU::INY(){
+u16 CPU::IDY(){
     // TODO
 }
 

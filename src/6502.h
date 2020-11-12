@@ -113,8 +113,8 @@ private:
     u16 ABX(); 
     u16 ABY();
     u16 IND();
-    u16 INX();
-    u16 INY();
+    u16 IDX();
+    u16 IDY();
 
     // Method signature for addressing modes
     u16 Prototype();
@@ -130,8 +130,8 @@ private:
         ABX, 
         ABY,
         IND,
-        INX,
-        INY
+        IDX,
+        IDY
     };
 
     enum AMode {
@@ -145,8 +145,8 @@ private:
         _ABX = 7, 
         _ABY = 8,
         _IND = 9,
-        _INX = 10,
-        _INY = 11
+        _IDX = 10,
+        _IDY = 11
     };
 
     // Instructions
