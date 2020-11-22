@@ -28,10 +28,17 @@
 //
 #include <stdlib.h>
 
+// Shortened Unsigned Types
 typedef u_int8_t u8;
 typedef u_int16_t u16;
 typedef u_int32_t u32;
 typedef u_int64_t u64;
+
+// Shortened Signed Types
+typedef int8_t s8;
+typedef int16_t s16;
+typedef int32_t s32;
+typedef int64_t s64;
 
 
 class CPU
@@ -105,7 +112,6 @@ private:
     // Addressing modes
     u16 IMM(); 
     u16 REL(); 
-    u16 ACC();
     u16 ZPG(); 
     u16 ZPX(); 
     u16 ZPY(); 
@@ -119,10 +125,9 @@ private:
     // Method signature for addressing modes
     u16 Prototype();
     using _AddressingMode_ = decltype(CPU::Prototype);
-    _AddressingMode_ modeTable[12] = {
+    _AddressingMode_ modeTable[11] = {
         IMM, 
         REL, 
-        ACC,
         ZPG, 
         ZPX, 
         ZPY,
@@ -137,16 +142,16 @@ private:
     enum AMode {
         _IMM = 0, 
         _REL = 1, 
-        _ACC = 2,
-        _ZPG = 3, 
-        _ZPX = 4, 
-        _ZPY = 5, 
-        _ABS = 6, 
-        _ABX = 7, 
-        _ABY = 8,
-        _IND = 9,
-        _IDX = 10,
-        _IDY = 11
+        _ZPG = 2, 
+        _ZPX = 3, 
+        _ZPY = 4, 
+        _ABS = 5, 
+        _ABX = 6, 
+        _ABY = 7,
+        _IND = 8,
+        _IDX = 9,
+        _IDY = 10,
+        _ACC = 11,
     };
 
     // Instructions

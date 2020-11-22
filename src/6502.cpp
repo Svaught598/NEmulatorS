@@ -291,66 +291,82 @@ void CPU::fetch(){
 
 // Immediate
 u16 CPU::IMM(){
-    // TODO
+    return PC + 1;
 }
 
 // Relative
 u16 CPU::REL(){
-    // TODO
-}
-
-// Accumulator
-u16 CPU::ACC(){
-    // TODO
+    s32 address = PC;
+    s8 offset = read(PC + 1);
+    address += offset;
+    return (u16) address;
+    
 }
 
 // Zero Page
 u16 CPU::ZPG(){
-    // TODO
+    u8 address = read(PC + 1);
+    return (u16) address;
 }
 
 // Zero Page X
 u16 CPU::ZPX(){
-    // TODO
+    u16 address = read(PC + 1);
+    address = (address + X) & 0xFF;
+    return address;
 }
 
 // Zero Page Y
 u16 CPU::ZPY(){
-    // TODO
+    u16 address = read(PC + 1);
+    address = (address + Y) & 0xFF;
+    return address;
 }
 
 // Absolute
 u16 CPU::ABS(){
-    // TODO
+    u16 LSN = read(PC + 1);
+    u16 MSN = read(PC + 2);
+    u16 address = LSN + (MSN << 4);
+    return address;
 }
 
 // Absolute X
 u16 CPU::ABX(){
-    // TODO
+    u16 address = ABS();
+    return address + X;
 }
 
 // Absolute Y
 u16 CPU::ABY(){
-    // TODO
+    u16 address = ABS();
+    return address + Y;
 }
-
 
 // Indirect
 u16 CPU::IND(){
-    // TODO
+    u16 address = ABS();
+    u16 LSN = read(address);
+    u16 MSN = read(address + 1);
+    address = LSN + (MSN << 4);
+    return address;
 }
-
 
 // Indirect X
 u16 CPU::IDX(){
-    // TODO
+    u16 address = read(PC + 1);
+    address = (address + X) & 0xFF;
+    u16 LSN = read(address);
+    u16 MSN = read(address + 1);
+    address = LSN + (MSN << 4);
+    return address;
 }
-
 
 // Indirect Y
 u16 CPU::IDY(){
     // TODO
 }
+
 
 ///////////////////////////////////////////////
 // Multiple Addr. Modes Instructions         //
