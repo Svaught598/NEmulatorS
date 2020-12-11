@@ -79,8 +79,8 @@ private:
 
     // Interacting with Memory via Bus
     void connectBus();
-    u8 read(u16 address);
-    void write(u16 address, u8 value);
+    u8 read(u32 address);
+    void write(u32 address, u8 value);
 
     // Exectuting opcodes & ticks 
     void execute();
@@ -110,22 +110,23 @@ private:
     void pushStack(u8 value);
 
     // Addressing modes
-    u16 IMM(); 
-    u16 REL(); 
-    u16 ZPG(); 
-    u16 ZPX(); 
-    u16 ZPY(); 
-    u16 ABS(); 
-    u16 ABX(); 
-    u16 ABY();
-    u16 IND();
-    u16 IDX();
-    u16 IDY();
+    u32 IMM(); 
+    u32 REL(); 
+    u32 ZPG(); 
+    u32 ZPX(); 
+    u32 ZPY(); 
+    u32 ABS(); 
+    u32 ABX(); 
+    u32 ABY();
+    u32 IND();
+    u32 IDX();
+    u32 IDY();
+    u32 ACC();
 
     // Method signature for addressing modes
-    u16 Prototype();
+    u32 Prototype();
     using _AddressingMode_ = decltype(CPU::Prototype);
-    _AddressingMode_ modeTable[11] = {
+    _AddressingMode_ modeTable[12] = {
         IMM, 
         REL, 
         ZPG, 
@@ -136,7 +137,8 @@ private:
         ABY,
         IND,
         IDX,
-        IDY
+        IDY,
+        ACC
     };
 
     enum AMode {
