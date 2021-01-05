@@ -397,7 +397,7 @@ u32 CPU::IDY(){
 
 // Or (With Accumulator)
 void CPU::ORA(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     A = A | M;
@@ -408,7 +408,7 @@ void CPU::ORA(CPU::AMode mode){
 
 // And (With Accumulator)
 void CPU::AND(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     A = A & M;
@@ -419,7 +419,7 @@ void CPU::AND(CPU::AMode mode){
 
 // Exclusive Or
 void CPU::EOR(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     A = A ^ M;
@@ -430,7 +430,7 @@ void CPU::EOR(CPU::AMode mode){
 
 // Add with Carry
 void CPU::ADC(CPU::AMode mode){
-    u8 address = (this->*modeTable[mode])();
+    u8 address = getAddress(mode);
     u8 M = read(address);
     
     u16 result = A+M+C;
@@ -444,14 +444,14 @@ void CPU::ADC(CPU::AMode mode){
 
 // Store Accumulator
 void CPU::STA(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     write(address, A);
 }
 
 
 // Load to Accumulator
 void CPU::LDA(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     A = M;
@@ -462,7 +462,7 @@ void CPU::LDA(CPU::AMode mode){
 
 // Compare
 void CPU::CMP(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     u8 result = A - M;
@@ -474,7 +474,7 @@ void CPU::CMP(CPU::AMode mode){
 
 // Subtract With Carry
 void CPU::SBC(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
     
     u16 result = A-M-(1-C);
@@ -488,7 +488,7 @@ void CPU::SBC(CPU::AMode mode){
 
 // Arithmetic Shift Left
 void CPU::ASL(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     setCarry(M & 0x80);
@@ -501,7 +501,7 @@ void CPU::ASL(CPU::AMode mode){
 
 // Rotate Left
 void CPU::ROL(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     bool carry = M & 0x80;
@@ -515,7 +515,7 @@ void CPU::ROL(CPU::AMode mode){
 
 // Logical Shift Right
 void CPU::LSR(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     bool carry = M & 1;
@@ -529,7 +529,7 @@ void CPU::LSR(CPU::AMode mode){
 
 // Rotate Right
 void CPU::ROR(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
     
     bool carry = M & 1;
@@ -543,14 +543,14 @@ void CPU::ROR(CPU::AMode mode){
 
 // Store X Register
 void CPU::STX(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     write(address, X);
 }
 
 
 // Load X Register
 void CPU::LDX(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     X = M;
@@ -561,7 +561,7 @@ void CPU::LDX(CPU::AMode mode){
 
 // Decrement Memory
 void CPU::DEC(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
     
     M = M - 1;
@@ -573,7 +573,7 @@ void CPU::DEC(CPU::AMode mode){
 
 // Increment Memory
 void CPU::INC(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
     
     M = M + 1;
@@ -585,7 +585,7 @@ void CPU::INC(CPU::AMode mode){
 
 // Bit Test
 void CPU::BIT(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     (M & 0x80) ? setNegative(true) : setNegative(false);
@@ -596,7 +596,7 @@ void CPU::BIT(CPU::AMode mode){
 
 // Jump
 void CPU::JMP(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     PC = M;
@@ -605,14 +605,14 @@ void CPU::JMP(CPU::AMode mode){
 
 // Store Y Register
 void CPU::STY(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     write(address, Y);
 }
 
 
 // Load Y Register
 void CPU::LDY(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     Y = M;
@@ -623,7 +623,7 @@ void CPU::LDY(CPU::AMode mode){
 
 // Compare Y Register
 void CPU::CPY(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
     
     u8 result = Y - M;
@@ -635,7 +635,7 @@ void CPU::CPY(CPU::AMode mode){
 
 // Compare X Register
 void CPU::CPX(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
     
     u8 result = X - M;
@@ -652,7 +652,7 @@ void CPU::CPX(CPU::AMode mode){
 
 // Branch if Positive
 void CPU::BPL(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     if (!N) {
@@ -663,7 +663,7 @@ void CPU::BPL(CPU::AMode mode){
 
 // Branch if Minus
 void CPU::BMI(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     if (N) {
@@ -674,7 +674,7 @@ void CPU::BMI(CPU::AMode mode){
 
 // Branch if Overflow Clear
 void CPU::BVC(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     if (!V) {
@@ -685,7 +685,7 @@ void CPU::BVC(CPU::AMode mode){
 
 // Branch if Overflow Set
 void CPU::BVS(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     if (V) {
@@ -696,7 +696,7 @@ void CPU::BVS(CPU::AMode mode){
 
 // Branch if Carry Clear
 void CPU::BCC(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     if (!C) {
@@ -707,7 +707,7 @@ void CPU::BCC(CPU::AMode mode){
 
 // Branch if Carry Set
 void CPU::BCS(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     if (C) {
@@ -718,7 +718,7 @@ void CPU::BCS(CPU::AMode mode){
 
 // Branch if Not Equal
 void CPU::BNE(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     if (!Z) {
@@ -729,7 +729,7 @@ void CPU::BNE(CPU::AMode mode){
 
 // Branch if Equal
 void CPU::BEQ(CPU::AMode mode){
-    u32 address = (this->*modeTable[mode])();
+    u32 address = getAddress(mode);
     u8 M = read(address);
 
     if (Z) {
@@ -759,7 +759,8 @@ void CPU::BRK(){
 
 // Jump to Subroutine
 void CPU::JSR(){
-    u32 address = (this->*modeTable[_ABS])();
+    AMode mode = _ABS;
+    u32 address = getAddress(mode);
 
     u16 returnPoint = PC - 1;
     u8 LSN = returnPoint & 0x00FF;

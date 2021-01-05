@@ -27,6 +27,8 @@
 //
 //
 #include <stdlib.h>
+#include <functional>
+#include "bus.h"
 
 // Shortened Unsigned Types
 typedef u_int8_t u8;
@@ -46,7 +48,9 @@ class CPU
 public:
 
     // constructor/destructor
-    CPU();
+    CPU(){
+        
+    };
     ~CPU();
 
     // exposed attributes
@@ -55,7 +59,7 @@ public:
 private:
 
     // Bus
-    // Bus bus;
+    Bus* bus;
 
     // Working variables
     u8 OP;
@@ -123,24 +127,6 @@ private:
     u32 IDY();
     u32 ACC();
 
-    // Method signature for addressing modes
-    u32 Prototype();
-    using _AddressingMode_ = decltype(CPU::Prototype);
-    _AddressingMode_ modeTable[12] = {
-        IMM, 
-        REL, 
-        ZPG, 
-        ZPX, 
-        ZPY,
-        ABS, 
-        ABX, 
-        ABY,
-        IND,
-        IDX,
-        IDY,
-        ACC
-    };
-
     enum AMode {
         _IMM = 0, 
         _REL = 1, 
@@ -154,6 +140,23 @@ private:
         _IDX = 9,
         _IDY = 10,
         _ACC = 11,
+    };
+
+    u32 getAddress(AMode &mode){
+        switch (mode) {
+            case _IMM: return IMM();
+            case _REL: return REL();
+            case _ZPG: return ZPG();
+            case _ZPX: return ZPX();
+            case _ZPY: return ZPY();
+            case _ABS: return ABS();
+            case _ABX: return ABX();
+            case _ABY: return ABY();
+            case _IND: return IND();
+            case _IDX: return IDX();
+            case _IDY: return IDY();
+            case _ACC: return ACC();
+        }
     };
 
     // Instructions
