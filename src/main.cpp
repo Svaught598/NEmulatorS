@@ -1,9 +1,12 @@
 #include <iostream>
-#include "../include/System.h"
+
+#include "../include/system.h"
+
 
 
 int main(){
+
+    // Mainloop
     System nes = System("NES");
-    std::cout << "hello world!";
-    return 0;
+    return nes.mainLoop();
 }

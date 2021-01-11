@@ -1,5 +1,5 @@
 #include <stdlib.h>
-#include "6502.h"
+#include "../include/6502.h"
 
 // We define an address outside of 
 // memory for accumulator addressing/reading/writing
@@ -14,6 +14,11 @@
 ///////////////////////////////////////////////
 
 
+// Connect the CPU to the Bus
+void CPU::connectBus(Bus* _bus){
+    bus = _bus;
+}
+
 // Read value at address from memory via bus
 u8 CPU::read(u32 address){
     if (address == ACCUMULATOR_ADDRESS){
@@ -21,6 +26,7 @@ u8 CPU::read(u32 address){
     }
     else {
         // TODO
+        return 0;
     }
 }
 

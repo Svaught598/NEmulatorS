@@ -48,10 +48,13 @@ class CPU
 public:
 
     // constructor/destructor
-    CPU(){
-        
+    CPU(Bus* _bus){
+        connectBus(_bus);
     };
-    ~CPU();
+    
+    ~CPU(){
+        delete bus;
+    };
 
     // exposed attributes
     u64 cycles;
@@ -82,7 +85,7 @@ private:
     bool N;
 
     // Interacting with Memory via Bus
-    void connectBus();
+    void connectBus(Bus* _bus);
     u8 read(u32 address);
     void write(u32 address, u8 value);
 
@@ -156,6 +159,7 @@ private:
             case _IDX: return IDX();
             case _IDY: return IDY();
             case _ACC: return ACC();
+            default: return 0;
         }
     };
 
