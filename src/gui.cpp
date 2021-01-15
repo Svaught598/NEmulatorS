@@ -29,12 +29,15 @@ namespace GUI {
 // GUI  Functions                            //
 ///////////////////////////////////////////////
 
-
 // error handling
 static void glfw_error_callback(int error, const char* description){
     fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
+
+///////////////////////////////////////////////
+// Setup Functions                           //
+///////////////////////////////////////////////
 
 int GUI::SetupWindow(){
     glfwSetErrorCallback(glfw_error_callback);
@@ -82,12 +85,52 @@ int GUI::SetupImGui(){
 }
 
 
+///////////////////////////////////////////////
+// General GUI Functions                     //
+///////////////////////////////////////////////
+
+
 void GUI::NewFrame(){
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
 }
 
+
+void GUI::Render(){
+    ImGui::Render();
+    int display_w, display_h;
+    glfwGetFramebufferSize(window, &display_w, &display_h);
+    glViewport(0, 0, display_w, display_h);
+    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
+    glClear(GL_COLOR_BUFFER_BIT);
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+
+void GUI::PollEvents(){
+    glfwPollEvents();
+}
+
+
+void GUI::SwapBuffers(){
+    glfwSwapBuffers(GUI::window);
+}
+
+
+int GUI::Cleanup(){
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+    glfwDestroyWindow(GUI::window);
+    glfwTerminate();
+    return 0;
+}
+
+
+///////////////////////////////////////////////
+// Functions that build GUI                  //
+///////////////////////////////////////////////
 
 void GUI::ShowDemo(){
     // 1. Show the ImGui demo
@@ -181,35 +224,4 @@ void GUI::MainMenuBar(){
         }
         ImGui::EndMainMenuBar();
     }
-}
-
-
-void GUI::Render(){
-    ImGui::Render();
-    int display_w, display_h;
-    glfwGetFramebufferSize(window, &display_w, &display_h);
-    glViewport(0, 0, display_w, display_h);
-    glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
-    glClear(GL_COLOR_BUFFER_BIT);
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-}
-
-
-int GUI::Cleanup(){
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplGlfw_Shutdown();
-    ImGui::DestroyContext();
-    glfwDestroyWindow(GUI::window);
-    glfwTerminate();
-    return 0;
-}
-
-
-void GUI::PollEvents(){
-    glfwPollEvents();
-}
-
-
-void GUI::SwapBuffers(){
-    glfwSwapBuffers(GUI::window);
 }
