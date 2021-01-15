@@ -1,11 +1,30 @@
 #include <stdlib.h>
+#include <iostream>
+#include <thread>
+
 #include "../include/system.h"
 #include "../include/gui.h"
 
 
 
 void System::setImguiDemo(){
-    GUI::demo_mode= true;
+    demo_mode = true;
+}
+
+void System::openFileSystem(){
+    // function for opening filesystem
+    auto f = []()
+    {
+        char filename[1024];
+        FILE *f = popen("zenity --file-selection", "r");
+        fgets(filename, 1024, f);
+        std::cout << filename;
+    };
+
+    // opens filesystem in separate thread to not interfere
+    // with emulation
+    std::thread file_system(f);
+    file_system.detach();
 }
 
 ///////////////////////////////////////////////
@@ -28,8 +47,17 @@ int System::mainLoop(){
     {
         GUI::PollEvents();
         GUI::NewFrame();
-        GUI::ShowDemo();    // Demo Window (set `show_demo_window` in gui.cpp)
-        GUI::MainMenuBar(); // Main GUI
+
+        // Demo Window (set by argument flag `--demo, -d`)
+        if (demo_mode)
+        {
+            GUI::ShowDemo();    
+        }
+
+        // Main GUI
+        {
+            GUI::MainMenuBar(this); 
+        }
         GUI::Render();
         GUI::SwapBuffers();
     }

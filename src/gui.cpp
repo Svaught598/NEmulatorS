@@ -7,6 +7,7 @@
 #include "../Imgui/imgui_impl_opengl3.h"
 
 #include "../include/gui.h"
+#include "../include/system.h"
 
 ///////////////////////////////////////////////
 // GUI Variables                             //
@@ -15,7 +16,6 @@
 
 // State Variable
 namespace GUI {
-    bool demo_mode = false;
     bool show_demo_window = true;
     bool show_another_window = true;
     float f = 0.0f;
@@ -133,8 +133,7 @@ int GUI::Cleanup(){
 ///////////////////////////////////////////////
 
 void GUI::ShowDemo(){
-    // 1. Show the ImGui demo
-    if (demo_mode){
+    {
         // Create a window called "Hello, world!" and append into it.
         ImGui::Begin("Hello, world!");
 
@@ -163,12 +162,12 @@ void GUI::ShowDemo(){
     }
 
     // 2. Show a simple window
-    if (demo_mode && show_demo_window){
+    if (show_demo_window){
         ImGui::ShowDemoWindow(&show_demo_window);
     }
 
     // 3. Show another simple window.
-    if (demo_mode && show_another_window)
+    if (show_another_window)
     {
         // Pass a pointer to our bool variable
         // (the window will have a closing button that will clear the bool when clicked)
@@ -181,11 +180,11 @@ void GUI::ShowDemo(){
 }
 
 
-void GUI::MainMenuBar(){
+void GUI::MainMenuBar(System* sys){
     if (ImGui::BeginMainMenuBar()){
         if (ImGui::BeginMenu("Library")){
             if (ImGui::MenuItem("Load Rom")){
-                // TODO: callback to open file
+                sys->openFileSystem();
             }
             if (ImGui::BeginMenu("Save")){
                 if (ImGui::MenuItem("State 1")){

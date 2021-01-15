@@ -12,8 +12,8 @@ UNAME_S := $(shell uname -s)
 
 .DEFAULT_GOAL := help
 CXXFLAGS = -I../ -I../../
-CXXFLAGS += -g -Wall -Wformat -lm -lstdc++ -Wshadow
-LIBS =
+CXXFLAGS += -g -Wall -Wformat -lm -lstdc++ -Wshadow -lpthread
+LIBS = 
 
 ##############################################
 # General Usage ##############################

@@ -1,3 +1,6 @@
+#ifndef NES_SYSTEM
+#define NES_SYSTEM
+
 #include <string>
 #include <iostream>
 
@@ -24,6 +27,7 @@ public:
     
     bool running = true;
 
+    void openFileSystem();
     void setImguiDemo();
     int mainLoop();
     void step();
@@ -31,7 +35,10 @@ public:
 private:
 
     std::string systemName;
+    bool demo_mode = false;
     Bus* bus;
     CPU* cpu;
 
 };
+
+#endif

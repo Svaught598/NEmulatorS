@@ -1,5 +1,9 @@
-#pragma once
+#ifndef NES_GUI
+#define NES_GUI
 
+
+
+class System;
 
 namespace GUI {
 
@@ -9,7 +13,6 @@ namespace GUI {
 
 
 // GUI State Variables
-extern bool demo_mode;
 extern bool show_demo_window;
 extern bool show_another_window;
 extern float f;
@@ -39,5 +42,7 @@ int Cleanup();
 
 // Functions that Build GUI
 void ShowDemo();
-void MainMenuBar();
+void MainMenuBar(System* sys);
 }
+
+#endif
