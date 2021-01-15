@@ -3,19 +3,41 @@
 
 namespace GUI {
 
+///////////////////////////////////////////////
+// GUI Variables                             //
+///////////////////////////////////////////////
+
+
 // GUI State Variables
-static bool show_demo_window;
-static bool show_another_window;
-static float f;
-static int counter;
-ImVec4 clear_color;
+extern bool demo_mode;
+extern bool show_demo_window;
+extern bool show_another_window;
+extern float f;
+extern int counter;
+extern ImVec4 clear_color;
+
+// GLFW & GL stuff
+extern GLFWwindow* window;
+extern char* glsl_version;
+
+///////////////////////////////////////////////
+// GUI  Functions                            //
+///////////////////////////////////////////////
 
 
-// GUI functions
-void SetupImGui(GLFWwindow *window, const char *glsl_version);
+// Setup Functions (obviously hehe)
+int SetupWindow();
+int SetupGLEW();
+int SetupImGui();
 
+// General Purpose Functions
 void NewFrame();
+void Render();
+void PollEvents();
+void SwapBuffers();
+int Cleanup();
+
+// Functions that Build GUI
 void ShowDemo();
-void ShowExampleAppMainMenuBar();
-void Render(GLFWwindow *window);
+void MainMenuBar();
 }

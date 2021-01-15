@@ -24,6 +24,7 @@ public:
     
     bool running = true;
 
+    void setImguiDemo();
     int mainLoop();
     void step();
 

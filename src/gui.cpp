@@ -1,3 +1,5 @@
+#include <iostream>
+
 #include <GL/glew.h>   
 #include <GLFW/glfw3.h>
 #include "../Imgui/imgui.h"
@@ -6,18 +8,66 @@
 
 #include "../include/gui.h"
 
+///////////////////////////////////////////////
+// GUI Variables                             //
+///////////////////////////////////////////////
 
-// GUI state variables
-namespace GUI{
-    static bool show_demo_window = true;
-    static bool show_another_window = true;
-    static float f = 0.0f;
-    static int counter = 0;
+
+// State Variable
+namespace GUI {
+    bool demo_mode = false;
+    bool show_demo_window = true;
+    bool show_another_window = true;
+    float f = 0.0f;
+    int counter = 0;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    char* glsl_version = "#version 130";
+    GLFWwindow* window = nullptr;
+}
+
+///////////////////////////////////////////////
+// GUI  Functions                            //
+///////////////////////////////////////////////
+
+
+// error handling
+static void glfw_error_callback(int error, const char* description){
+    fprintf(stderr, "Glfw Error %d: %s\n", error, description);
 }
 
 
-void GUI::SetupImGui(GLFWwindow *window, const char *glsl_version){
+int GUI::SetupWindow(){
+    glfwSetErrorCallback(glfw_error_callback);
+    if (!glfwInit()) return 1;
+
+    // GL 3.0 + GLSL 130
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
+
+    // Create window with graphics context
+    GUI::window = glfwCreateWindow(1280, 720, "Dear ImGui GLFW+OpenGL3 example", NULL, NULL);
+    if (GUI::window == NULL)
+        return 1;
+    glfwMakeContextCurrent(GUI::window);
+    glfwSwapInterval(1); // Enable vsync
+    return 0;
+}
+
+
+int GUI::SetupGLEW(){
+    // Initialize OpenGL loader
+    bool err = glewInit() != GLEW_OK;
+    if (err){
+        fprintf(stderr, "Failed to initialize OpenGL loader!\n");
+        return 1;
+    }
+    return 0;
+}
+
+
+int GUI::SetupImGui(){
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -26,8 +76,9 @@ void GUI::SetupImGui(GLFWwindow *window, const char *glsl_version){
     //io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
     //ImGui::StyleColorsDark();
     ImGui::StyleColorsClassic();
-    ImGui_ImplGlfw_InitForOpenGL(window, true);
-    ImGui_ImplOpenGL3_Init(glsl_version);
+    ImGui_ImplGlfw_InitForOpenGL(GUI::window, true);
+    ImGui_ImplOpenGL3_Init(GUI::glsl_version);
+    return 0;
 }
 
 
@@ -39,18 +90,27 @@ void GUI::NewFrame(){
 
 
 void GUI::ShowDemo(){
-    ImGui::ShowDemoWindow(&show_demo_window);
-    {
-        ImGui::Begin("Hello, world!");                          // Create a window called "Hello, world!" and append into it.
+    // 1. Show the ImGui demo
+    if (demo_mode){
+        // Create a window called "Hello, world!" and append into it.
+        ImGui::Begin("Hello, world!");
 
-        ImGui::Text("This is some useful text.");               // Display some text (you can use a format strings too)
-        ImGui::Checkbox("Demo Window", &show_demo_window);                  // Edit bools storing our window open/close state
+        // Display some text (you can use a format strings too)
+        ImGui::Text("This is some useful text.");
+
+        // Edit bools storing our window open/close state
+        ImGui::Checkbox("Demo Window", &show_demo_window);                  
         ImGui::Checkbox("Another Window", &show_another_window);
 
-        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);            // Edit 1 float using a slider from 0.0f to 1.0f
-        ImGui::ColorEdit3("clear color", (float*)&clear_color); // Edit 3 floats representing a color
+        // Edit 1 float using a slider from 0.0f to 1.0f
+        ImGui::SliderFloat("float", &f, 0.0f, 1.0f);
 
-        if (ImGui::Button("Button"))                            // Buttons return true when clicked (most widgets return true when edited/activated)
+        // Edit 3 floats representing a color
+        ImGui::ColorEdit3("clear color", (float*)&clear_color); 
+
+        // Buttons return true when clicked
+        // (most widgets return true when edited/activated)
+        if (ImGui::Button("Button"))                            
             counter++;
         ImGui::SameLine();
         ImGui::Text("counter = %d", counter);
@@ -59,10 +119,17 @@ void GUI::ShowDemo(){
         ImGui::End();
     }
 
-    // 3. Show another simple wi ndow.
-    if (show_another_window)
+    // 2. Show a simple window
+    if (demo_mode && show_demo_window){
+        ImGui::ShowDemoWindow(&show_demo_window);
+    }
+
+    // 3. Show another simple window.
+    if (demo_mode && show_another_window)
     {
-        ImGui::Begin("Another Window", &show_another_window);   // Pass a pointer to our bool variable (the window will have a closing button that will clear the bool when clicked)
+        // Pass a pointer to our bool variable
+        // (the window will have a closing button that will clear the bool when clicked)
+        ImGui::Begin("Another Window", &show_another_window);   
         ImGui::Text("Hello from another window!");
         if (ImGui::Button("Close Me"))
             show_another_window = false;
@@ -70,7 +137,8 @@ void GUI::ShowDemo(){
     }
 }
 
-void GUI::ShowExampleAppMainMenuBar(){
+
+void GUI::MainMenuBar(){
     if (ImGui::BeginMainMenuBar()){
         if (ImGui::BeginMenu("Library")){
             if (ImGui::MenuItem("Load Rom")){
@@ -80,10 +148,10 @@ void GUI::ShowExampleAppMainMenuBar(){
                 if (ImGui::MenuItem("State 1")){
                     // TODO: save state 1 callback function
                 }
-                if (ImGui::BeginMenu("State 2")){
+                if (ImGui::MenuItem("State 2")){
                     // TODO: save state 2 callback function
                 }
-                if (ImGui::BeginMenu("State 3")){
+                if (ImGui::MenuItem("State 3")){
                     // TODO: save state 3 callback function
                 }
                 ImGui::EndMenu();
@@ -116,7 +184,7 @@ void GUI::ShowExampleAppMainMenuBar(){
 }
 
 
-void GUI::Render(GLFWwindow *window){
+void GUI::Render(){
     ImGui::Render();
     int display_w, display_h;
     glfwGetFramebufferSize(window, &display_w, &display_h);
@@ -124,4 +192,24 @@ void GUI::Render(GLFWwindow *window){
     glClearColor(clear_color.x, clear_color.y, clear_color.z, clear_color.w);
     glClear(GL_COLOR_BUFFER_BIT);
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+}
+
+
+int GUI::Cleanup(){
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+    glfwDestroyWindow(GUI::window);
+    glfwTerminate();
+    return 0;
+}
+
+
+void GUI::PollEvents(){
+    glfwPollEvents();
+}
+
+
+void GUI::SwapBuffers(){
+    glfwSwapBuffers(GUI::window);
 }
