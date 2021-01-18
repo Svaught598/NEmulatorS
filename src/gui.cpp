@@ -184,7 +184,7 @@ void GUI::MainMenuBar(System* sys){
     if (ImGui::BeginMainMenuBar()){
         if (ImGui::BeginMenu("Library")){
             if (ImGui::MenuItem("Load Rom")){
-                sys->openFileSystem();
+                sys->loadCart();
             }
             if (ImGui::BeginMenu("Save")){
                 if (ImGui::MenuItem("State 1")){

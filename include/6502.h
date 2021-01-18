@@ -1,31 +1,6 @@
-///////////////////////////////
-// 6502 CPU for NES emulator //
-// Author: Steven Vaught     //
-///////////////////////////////
-//
-//  Implementation Details
-//
-//  Flags:
-//      - Each flag is it's own bool variable
-//      - methods for decoding/encoding to byte for IO stuffs
-//
-//  Stack:
-//      - Uses Descending 'Empty' Stack
-//      - Address space 0x0100 - 0x01FF (256 bytes)
-//      - Stack Pointer initialized to 0xFF
-//
-//  Addressing Modes & Opcodes:
-//      - Uses a switch statement to call opcode functions
-//      - opcode functions accept addressing mode as argument (as enum)
-//      - enum val corresponds to array index of appropriate addressing mode function
-//      - addressing mode functions return address to be used
-//      - reading/writing is handled by the opcode itself
-//
-//
-//
-//
-//
-//
+#ifndef NES_6502
+#define NES_6502
+
 #include <stdlib.h>
 #include <functional>
 
@@ -35,6 +10,9 @@
 
 class CPU
 {
+    /**
+     * CPU class
+    */
 public:
 
     // constructor/destructor
@@ -221,3 +199,4 @@ private:
     void DEX(); 
     void NOP();
 };
+#endif

@@ -1,37 +1,48 @@
 #include <stdlib.h>
 #include <iostream>
+#include <fstream>
 #include <thread>
 
 #include "../include/system.h"
 #include "../include/gui.h"
 
 
+///////////////////////////////////////////////
+// Public Methods                            //
+///////////////////////////////////////////////
 
-void System::setImguiDemo(){
+
+// load cart from filepath (for testing)
+void System::loadCart(char* filepath){
+    cart = new Cart(filepath);
+    cart_loaded = true;
+}
+
+
+// load cart from filesystem selection window
+void System::loadCart(){
+    char* filepath = openFileSystem();
+    cart = new Cart(filepath);
+    cart_loaded = true;
+}
+
+
+// Sets the flag for rendering the ImGui demo widgets
+void System::setImguiDemo(bool is_demo){
     demo_mode = true;
 }
 
-void System::openFileSystem(){
-    // function for opening filesystem
-    auto f = []()
-    {
-        char filename[1024];
-        FILE *f = popen("zenity --file-selection", "r");
-        fgets(filename, 1024, f);
-        std::cout << filename;
-    };
 
-    // opens filesystem in separate thread to not interfere
-    // with emulation
-    std::thread file_system(f);
-    file_system.detach();
+// Loads Blarggs NesTest.nes & sets emulator to run
+void System::setTesting(bool is_testing){
+    if (is_testing){
+        loadCart("./test/nestest.nes");
+        setRunning(true);
+    }
 }
 
-///////////////////////////////////////////////
-// Main Loop & Cleanup                       //
-///////////////////////////////////////////////
 
-
+// Where the action happens!
 int System::mainLoop(){
 
     // Setup Stuff
@@ -64,4 +75,31 @@ int System::mainLoop(){
 
     // Cleanup
     return GUI::Cleanup();
+}
+
+
+///////////////////////////////////////////////
+// Private methods                           //
+///////////////////////////////////////////////
+
+
+// sets the emulator `running` variable
+void System::setRunning(bool is_running){
+    running = is_running;
+}
+
+
+// opens a filesystem and returns chosen filepath
+char* System::openFileSystem(){
+    auto f = []()
+    {
+        char filename[1024];
+        FILE *f = popen("zenity --file-selection", "r");
+        fgets(filename, 1024, f);
+        return filename;
+    };
+
+    // separate thread - Don't block emulation
+    std::thread file_system(f);
+    file_system.detach();
 }

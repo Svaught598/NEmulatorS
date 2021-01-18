@@ -2,7 +2,6 @@
 #define NES_GUI
 
 
-
 class System;
 
 namespace GUI {

@@ -12,11 +12,14 @@
 
 #include "../include/6502.h"
 #include "../include/gui.h"
-
+#include "../include/cart.h"
 
 
 class System
 {
+    /**
+     * Singleton System Class
+    */
 public:
 
     System(std::string name){
@@ -24,20 +27,31 @@ public:
         Bus* bus = new Bus();
         CPU* cpu = new CPU(bus);
     };
-    
-    bool running = true;
 
-    void openFileSystem();
-    void setImguiDemo();
+    void loadCart(char* filepath);
+    void loadCart();
+
+    void setImguiDemo(bool is_demo);
+    void setTesting(bool is_testing);
+
     int mainLoop();
-    void step();
-
+    
 private:
 
-    std::string systemName;
-    bool demo_mode = false;
+    // NES components
     Bus* bus;
     CPU* cpu;
+    Cart* cart;
+
+    // State Variables
+    std::string systemName;
+    bool demo_mode = false;
+    bool test_mode = false;
+    bool cart_loaded = false;
+    bool running = false;
+
+    void setRunning(bool is_running);
+    char* openFileSystem();
 
 };
 

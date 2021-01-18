@@ -25,8 +25,12 @@ int main(int argc, char *argv[]){
     if(argc == 2){ 
         std::string argument = argv[1];
         if (argument == "--demo" || argument == "-d"){
-            nes.setImguiDemo();
-            std::cout << "demo set!";
+            std::cout << "ImGui demo mode set";
+            nes.setImguiDemo(true);
+        }
+        else if (argument == "--test" || argument == "-t"){
+            std::cout << "Running Blargs tests";
+            nes.setTesting(true);
         }
         else if (argument == "--help" || argument == "-h"){
             return printUsage();

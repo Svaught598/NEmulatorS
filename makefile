@@ -1,11 +1,12 @@
 
 EXE  = NES
-NES_SRCS = \
-	6502.cpp \
-	bus.cpp \
-	main.cpp \
-	system.cpp \
-	gui.cpp
+NES_SRCS =   	\
+	6502.cpp 	\
+	bus.cpp 	\
+	main.cpp 	\
+	system.cpp 	\
+	gui.cpp 	\
+	cart.cpp
 NES_OBJS = $(addsuffix .o, $(basename $(notdir $(NES_SRCS))))
 
 UNAME_S := $(shell uname -s)
