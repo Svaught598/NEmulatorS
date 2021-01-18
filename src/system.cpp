@@ -15,7 +15,7 @@
 // load cart from filepath (for testing)
 void System::loadCart(char* filepath){
     cart = new Cart(filepath);
-    cart_loaded = true;
+    cartLoaded = true;
 }
 
 
@@ -23,19 +23,19 @@ void System::loadCart(char* filepath){
 void System::loadCart(){
     char* filepath = openFileSystem();
     cart = new Cart(filepath);
-    cart_loaded = true;
+    cartLoaded = true;
 }
 
 
 // Sets the flag for rendering the ImGui demo widgets
-void System::setImguiDemo(bool is_demo){
-    demo_mode = true;
+void System::setImguiDemo(bool isDemo){
+    demoMode = isDemo;
 }
 
 
 // Loads Blarggs NesTest.nes & sets emulator to run
-void System::setTesting(bool is_testing){
-    if (is_testing){
+void System::setTesting(bool isTesting){
+    if (isTesting){
         loadCart("./test/nestest.nes");
         setRunning(true);
     }
@@ -60,7 +60,7 @@ int System::mainLoop(){
         GUI::NewFrame();
 
         // Demo Window (set by argument flag `--demo, -d`)
-        if (demo_mode)
+        if (demoMode)
         {
             GUI::ShowDemo();    
         }
@@ -84,8 +84,8 @@ int System::mainLoop(){
 
 
 // sets the emulator `running` variable
-void System::setRunning(bool is_running){
-    running = is_running;
+void System::setRunning(bool isRunning){
+    running = isRunning;
 }
 
 

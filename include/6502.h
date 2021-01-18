@@ -53,7 +53,7 @@ private:
     bool N;
 
     // Interacting with Memory via Bus
-    void connectBus(Bus* _bus);
+    void connectBus(Bus* newBus);
     u8 read(u32 address);
     void write(u32 address, u8 value);
 

@@ -31,8 +31,8 @@ public:
     void loadCart(char* filepath);
     void loadCart();
 
-    void setImguiDemo(bool is_demo);
-    void setTesting(bool is_testing);
+    void setImguiDemo(bool isDemo);
+    void setTesting(bool isTesting);
 
     int mainLoop();
     
@@ -45,12 +45,12 @@ private:
 
     // State Variables
     std::string systemName;
-    bool demo_mode = false;
-    bool test_mode = false;
-    bool cart_loaded = false;
+    bool demoMode = false;
+    bool testMode = false;
+    bool cartLoaded = false;
     bool running = false;
 
-    void setRunning(bool is_running);
+    void setRunning(bool isRunning);
     char* openFileSystem();
 
 };

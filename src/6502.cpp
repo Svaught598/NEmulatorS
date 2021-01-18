@@ -15,8 +15,8 @@
 
 
 // Connect the CPU to the Bus
-void CPU::connectBus(Bus* _bus){
-    bus = _bus;
+void CPU::connectBus(Bus* newBus){
+    bus = newBus;
 }
 
 // Read value at address from memory via bus
