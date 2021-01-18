@@ -1,4 +1,3 @@
-#include <stdlib.h>
 #include "../include/6502.h"
 
 // We define an address outside of 

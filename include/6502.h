@@ -1,7 +1,6 @@
 #ifndef NES_6502
 #define NES_6502
 
-#include <stdlib.h>
 #include <functional>
 
 #include "bus.h"
