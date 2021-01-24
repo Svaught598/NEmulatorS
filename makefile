@@ -30,9 +30,14 @@ build: ## builds the project!
 	@echo "All done!"
 
 
+valgrind: ## builds the project with compiler flags & runs valgrind
+	$(MAKE) main
+	valgrind --leak-check=full --show-reachable=yes --log-file="memleaks" -q -s ./NES -t 
+
+
 clean: ## cleans up the intermediate files
 	@echo "Cleaning up..."
-	rm -f $(EXE) $(NES_OBJS) $(IMG_OBJS)
+	rm -f $(EXE) $(NES_OBJS) 
 	@echo "All done!"
 
 ##############################################
