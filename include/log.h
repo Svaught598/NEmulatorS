@@ -51,8 +51,10 @@ public:
                 ++logger.numWarnings;
                 break;
             case Logger::logType::LOG_OPCODE:
-            default:
                 logger.myFile << "[OPCODE]: ";
+                break;
+            default:
+                logger.myFile << "[INFO]: ";
                 break;
         }
         return logger;
