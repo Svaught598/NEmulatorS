@@ -45,4 +45,5 @@ int main(int argc, char *argv[]){
 
     // enter the main emulation loop
     return nes.mainLoop();
+
 }

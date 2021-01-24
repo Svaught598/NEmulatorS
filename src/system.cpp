@@ -6,6 +6,14 @@
 #include "../include/gui.h"
 
 
+System::System(std::string name)
+{
+    systemName = name;
+    bus = std::make_shared<Bus>();
+    cpu = std::make_shared<CPU>(bus);
+}
+
+
 ///////////////////////////////////////////////
 // Public Methods                            //
 ///////////////////////////////////////////////
@@ -13,7 +21,8 @@
 
 // load cart from filepath (for testing)
 void System::loadCart(char* filepath){
-    cart = new Cart(filepath);
+    cart = std::make_shared<Cart>(filepath);
+    bus->insertCart(cart);
     cartLoaded = true;
 }
 
@@ -21,8 +30,10 @@ void System::loadCart(char* filepath){
 // load cart from filesystem selection window
 void System::loadCart(){
     char* filepath = openFileSystem();
-    cart = new Cart(filepath);
+    cart = std::make_shared<Cart>(filepath);
+    bus->insertCart(cart);
     cartLoaded = true;
+    delete filepath;
 }
 
 

@@ -2,9 +2,14 @@
 #define NES_6502
 
 #include <functional>
+#include <memory>
 
-#include "bus.h"
 #include "typedefs.h"
+
+
+// circular include if I #include "bus.h"
+// so I'm just going with a declaration
+class Bus;
 
 
 class CPU
@@ -15,13 +20,8 @@ class CPU
 public:
 
     // constructor/destructor
-    CPU(Bus* _bus){
-        connectBus(_bus);
-    };
-    
-    ~CPU(){
-        delete bus;
-    };
+    CPU(std::shared_ptr<Bus> newBus);
+    ~CPU(){};
 
     // exposed attributes
     u64 cycles;
@@ -29,7 +29,7 @@ public:
 private:
 
     // Bus
-    Bus* bus;
+    std::shared_ptr<Bus> bus;
 
     // Working variables
     u8 OP;
@@ -51,12 +51,10 @@ private:
     bool V;
     bool N;
 
-    // Interacting with Memory via Bus
-    void connectBus(Bus* newBus);
+
+    void connectBus(std::shared_ptr<Bus> newBus);
     u8 read(u32 address);
     void write(u32 address, u8 value);
-
-    // Exectuting opcodes & ticks 
     void execute();
     void fetch();
 

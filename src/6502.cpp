@@ -1,4 +1,8 @@
+#include <stdlib.h>
+#include <memory>
+
 #include "../include/6502.h"
+#include "../include/bus.h"
 
 // We define an address outside of 
 // memory for accumulator addressing/reading/writing
@@ -8,13 +12,18 @@
 #define IRQ_INTERRUPT 0xFFFE
 
 
+
+CPU::CPU(std::shared_ptr<Bus> newBus){
+    bus = newBus;
+}
+
 ///////////////////////////////////////////////
 // Interface with Bus                        //
 ///////////////////////////////////////////////
 
 
 // Connect the CPU to the Bus
-void CPU::connectBus(Bus* newBus){
+void CPU::connectBus(std::shared_ptr<Bus> newBus){
     bus = newBus;
 }
 
@@ -24,8 +33,8 @@ u8 CPU::read(u32 address){
         return A;
     }
     else {
-        // TODO
-        return 0;
+        u16 trueAddress = (u16) address;
+        return bus->read(address);
     }
 }
 
@@ -36,7 +45,8 @@ void CPU::write(u32 address, u8 value){
         A = value;
     }
     else {
-        // TODO
+        u16 trueAddress = (u16) address;
+        bus->write(address, value);
     }
 }
 
@@ -595,7 +605,7 @@ void CPU::BIT(CPU::AMode mode){
 
     (M & 0x80) ? setNegative(true) : setNegative(false);
     (M & 0x40) ? setOverflow(true) : setOverflow(false);
-    if (A & M == 0) {setZero(true);}
+    if ((A & M) == 0) {setZero(true);}
 }
 
 

@@ -3,6 +3,7 @@
 
 #include <string>
 #include <iostream>
+#include <memory>
 
 #include <GL/glew.h>   
 #include <GLFW/glfw3.h>
@@ -12,6 +13,7 @@
 
 #include "../include/6502.h"
 #include "../include/gui.h"
+#include "../include/bus.h"
 #include "../include/cart.h"
 
 
@@ -22,11 +24,8 @@ class System
     */
 public:
 
-    System(std::string name){
-        systemName = name;
-        Bus* bus = new Bus();
-        CPU* cpu = new CPU(bus);
-    };
+    System(std::string name);
+    ~System(){};
 
     void loadCart(char* filepath);
     void loadCart();
@@ -39,9 +38,9 @@ public:
 private:
 
     // NES components
-    Bus* bus;
-    CPU* cpu;
-    Cart* cart;
+    std::shared_ptr<Bus> bus;
+    std::shared_ptr<CPU> cpu;
+    std::shared_ptr<Cart> cart;
 
     // State Variables
     std::string systemName;

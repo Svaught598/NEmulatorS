@@ -1,6 +1,8 @@
 #ifndef TYPEDEF
 #define TYPEDEF
 
+#include <memory>
+
 /**
  * Just a bunch of typedefs to make the code more succinct/readable
  * moved to a separate file since these types are used throughout the project
@@ -17,5 +19,6 @@ typedef int8_t s8;
 typedef int16_t s16;
 typedef int32_t s32;
 typedef int64_t s64;
+
 
 #endif
