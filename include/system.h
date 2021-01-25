@@ -15,6 +15,7 @@
 #include "../include/gui.h"
 #include "../include/bus.h"
 #include "../include/cart.h"
+#include "../include/log.h"
 
 
 class System
@@ -24,7 +25,7 @@ class System
     */
 public:
 
-    System(std::string name);
+    System(std::string name, std::shared_ptr<Logger> newLogger);
     ~System(){};
 
     void loadCart(char* filepath);
@@ -41,6 +42,7 @@ private:
     std::shared_ptr<Bus> bus;
     std::shared_ptr<CPU> cpu;
     std::shared_ptr<Cart> cart;
+    std::shared_ptr<Logger> logger;
 
     // State Variables
     std::string systemName;
@@ -49,6 +51,7 @@ private:
     bool cartLoaded = false;
     bool running = false;
 
+    void tick();
     void setRunning(bool isRunning);
     char* openFileSystem();
 

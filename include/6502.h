@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "typedefs.h"
+#include "log.h"
 
 
 // circular include if I #include "bus.h"
@@ -24,12 +25,15 @@ public:
     ~CPU(){};
 
     // exposed attributes
+    void tick();
+    void connectLogger(std::shared_ptr<Logger> newLogger);
     u64 cycles;
 
 private:
 
     // Bus
     std::shared_ptr<Bus> bus;
+    std::shared_ptr<Logger> logger;
 
     // Working variables
     u8 OP;

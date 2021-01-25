@@ -15,13 +15,18 @@ Bus::~Bus(){
 }
 
 
-void Bus::insertCart(std::shared_ptr<Cart> newCart){
+void Bus::connectCart(std::shared_ptr<Cart> newCart){
     cart = newCart;
 }
 
 
 void Bus::connectCPU(std::shared_ptr<CPU> newCpu){
     cpu = newCpu;
+}
+
+
+void Bus::connectLogger(std::shared_ptr<Logger> newLogger){
+    logger = newLogger;
 }
 
 

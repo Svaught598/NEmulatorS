@@ -2,6 +2,7 @@
 #include <string>
 
 #include "../include/system.h"
+#include "../include/log.h"
 
 
 int printUsage(){
@@ -20,16 +21,17 @@ int printUsage(){
 
 int main(int argc, char *argv[]){
 
-    System nes = System("NES");
+    std::shared_ptr<Logger> logger = std::make_shared<Logger>();
+    System nes = System("NES", logger);
 
     if(argc == 2){ 
         std::string argument = argv[1];
         if (argument == "--demo" || argument == "-d"){
-            std::cout << "ImGui demo mode set";
+            *logger << Logger::logType::LOG_INFO << "ImGui demo mode set";
             nes.setImguiDemo(true);
         }
         else if (argument == "--test" || argument == "-t"){
-            std::cout << "Running Blargs tests";
+            *logger << Logger::logType::LOG_INFO << "Running Blargs tests";
             nes.setTesting(true);
         }
         else if (argument == "--help" || argument == "-h"){

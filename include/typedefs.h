@@ -1,7 +1,6 @@
 #ifndef TYPEDEF
 #define TYPEDEF
 
-#include <memory>
 
 /**
  * Just a bunch of typedefs to make the code more succinct/readable

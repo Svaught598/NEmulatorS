@@ -13,9 +13,24 @@
 
 
 
+
+// constructor
 CPU::CPU(std::shared_ptr<Bus> newBus){
     bus = newBus;
 }
+
+
+// fetch & execute opcode
+void CPU::tick(){
+
+}
+
+
+// connect system logger for logging stuff
+void CPU::connectLogger(std::shared_ptr<Logger> newLogger){
+    logger = newLogger;
+}
+
 
 ///////////////////////////////////////////////
 // Interface with Bus                        //

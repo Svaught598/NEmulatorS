@@ -14,7 +14,7 @@ public:
     };
 
     // Constructor
-    explicit Logger (const char *fname = "iglog.txt")
+    explicit Logger (const char *fname = "nes_log.txt")
     {
         numWarnings = 0;
         numErrors = 0;
@@ -67,15 +67,17 @@ public:
         return logger;
     }
 
-
-    // Make it non copyable
-    Logger (const Logger &) = delete;
-    Logger &operator= (const Logger &) = delete;
+    friend Logger &operator << (Logger &logger, const std::string &text){
+        logger.myFile << text << std::endl;
+        return logger;
+    }
 
 private:
+
     std::ofstream myFile;
     unsigned int numWarnings;
     unsigned int numErrors;
+
 };
 
 #endif
