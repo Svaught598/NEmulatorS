@@ -18,6 +18,7 @@
 namespace GUI {
     bool show_demo_window = true;
     bool show_another_window = true;
+    bool show_debug_window = true;
     float f = 0.0f;
     int counter = 0;
     ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
@@ -161,22 +162,22 @@ void GUI::ShowDemo(){
         ImGui::End();
     }
 
-    // 2. Show a simple window
+    // // 2. Show a simple window
     if (show_demo_window){
         ImGui::ShowDemoWindow(&show_demo_window);
     }
 
-    // 3. Show another simple window.
-    if (show_another_window)
-    {
-        // Pass a pointer to our bool variable
-        // (the window will have a closing button that will clear the bool when clicked)
-        ImGui::Begin("Another Window", &show_another_window);   
-        ImGui::Text("Hello from another window!");
-        if (ImGui::Button("Close Me"))
-            show_another_window = false;
-        ImGui::End();
-    }
+    // // 3. Show another simple window.
+    // if (show_another_window)
+    // {
+    //     // Pass a pointer to our bool variable
+    //     // (the window will have a closing button that will clear the bool when clicked)
+    //     ImGui::Begin("Another Window", &show_another_window);   
+    //     ImGui::Text("Hello from another window!");
+    //     if (ImGui::Button("Close Me"))
+    //         show_another_window = false;
+    //     ImGui::End();
+    // }
 }
 
 
@@ -223,4 +224,20 @@ void GUI::MainMenuBar(System* sys){
         }
         ImGui::EndMainMenuBar();
     }
+}
+
+
+void GUI::CPUDebugWindow(CPU &cpu){
+    ImGui::Begin("CPU Debug Window", &show_debug_window); 
+    ImGui::Text("Last Executed Opcode %x", cpu.OP);
+    ImGui::Text("PC = %x", cpu.PC);  
+    ImGui::Text("SP = %x", cpu.SP);
+    ImGui::Text("A = %x", cpu.A);
+    ImGui::Text("X = %x", cpu.X);
+    ImGui::Text("Y = %x", cpu.Y);
+    
+    if (ImGui::Button("Step CPU")){
+        cpu.tick();
+    }
+    ImGui::End();
 }

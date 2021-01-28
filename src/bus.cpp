@@ -51,5 +51,6 @@ u8 Bus::read(u16 address){
     }
     else {
         cart->read(address);
+        std::cout << "reading from cart" << std::endl;
     }
 }

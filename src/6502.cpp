@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <memory>
 
+#include <boost/format.hpp>
+
 #include "../include/6502.h"
 #include "../include/bus.h"
 
@@ -12,17 +14,17 @@
 #define IRQ_INTERRUPT 0xFFFE
 
 
-
-
 // constructor
-CPU::CPU(std::shared_ptr<Bus> newBus){
-    bus = newBus;
-}
-
+CPU::CPU(std::shared_ptr<Bus> newBus)
+    : PC(0xFFFC), SP(0xFD), A(0), X(0), Y(0), cycles(0)
+    , C(0), Z(0), I(1), D(0), B(0), U(0), V(0), N(0)
+    , bus(newBus){}
 
 // fetch & execute opcode
 void CPU::tick(){
-
+    fetch();
+    execute();
+    logState();
 }
 
 
@@ -32,15 +34,18 @@ void CPU::connectLogger(std::shared_ptr<Logger> newLogger){
 }
 
 
+void CPU::logState(){
+    boost::format fmt = boost::format(                              
+        "PC:%1$#X  OP:%2$#X  SP:%3$#X  A:%4$#X  X:%5$#X  Y:%6$#X"   
+    ) % (int) PC % (int) OP % (int) SP % (int) A % (int) X % (int) Y;
+    *logger << Logger::logType::LOG_INFO << fmt.str();
+}
+
+
 ///////////////////////////////////////////////
 // Interface with Bus                        //
 ///////////////////////////////////////////////
 
-
-// Connect the CPU to the Bus
-void CPU::connectBus(std::shared_ptr<Bus> newBus){
-    bus = newBus;
-}
 
 // Read value at address from memory via bus
 u8 CPU::read(u32 address){
@@ -144,7 +149,7 @@ void CPU::execute(){
         case 0x69: ADC(_IMM); break;
         case 0x65: ADC(_ZPG); break;
         case 0x75: ADC(_ZPX); break;
-        case 0x6D: ADC(_ZPY); break;
+        case 0x6D: ADC(_ABS); break;
         case 0x7D: ADC(_ABX); break;
         case 0x79: ADC(_ABY); break;
         case 0x61: ADC(_IDX); break;
@@ -181,7 +186,7 @@ void CPU::execute(){
         case 0xE4: CPX(_ZPG); break;
         case 0xEC: CPX(_ABS); break;
 
-        case 0xC0: CPY(_IMM); break;
+        case 0xC0: CPY(_IMM); std::cout << PC<< std::endl; break;
         case 0xC4: CPY(_ZPG); break;
         case 0xCC: CPY(_ABS); break;
 
@@ -290,6 +295,7 @@ void CPU::execute(){
         case 0x50: BVC(_REL); break;
         case 0x70: BVS(_REL); break;
 
+
         // INTERRUPTS
         case 0x00: BRK(); break;
         case 0x20: JSR(); break;
@@ -326,6 +332,9 @@ void CPU::execute(){
 // fetchs opcode at PC address
 void CPU::fetch(){
     OP = read(PC);
+
+    boost::format fmt = boost::format("(in `void CPU::fetch()`) OP:%1$#X") % (int) OP;
+    *logger << Logger::logType::LOG_INFO << fmt.str();
 }
 
 
@@ -336,11 +345,15 @@ void CPU::fetch(){
 
 // Immediate
 u32 CPU::IMM(){
-    return PC + 1;
+    u16 temp = PC + 1;
+
+    PC += 2;
+    return temp;
 }
 
 // Accumulator
 u32 CPU::ACC(){
+    PC += 1;
     return ACCUMULATOR_ADDRESS;
 }
 
@@ -349,12 +362,16 @@ u32 CPU::REL(){
     s32 address = PC;
     s8 offset = read(PC + 1);
     address += offset;
+
+    PC += 2;
     return (u16) address;
 }
 
 // Zero Page
 u32 CPU::ZPG(){
     u8 address = read(PC + 1);
+
+    PC += 2;
     return (u16) address;
 }
 
@@ -362,6 +379,8 @@ u32 CPU::ZPG(){
 u32 CPU::ZPX(){
     u32 address = read(PC + 1);
     address = (address + X) & 0xFF;
+
+    PC += 2;
     return address;
 }
 
@@ -369,6 +388,8 @@ u32 CPU::ZPX(){
 u32 CPU::ZPY(){
     u32 address = read(PC + 1);
     address = (address + Y) & 0xFF;
+
+    PC += 2;
     return address;
 }
 
@@ -377,6 +398,8 @@ u32 CPU::ABS(){
     u16 LSN = read(PC + 1);
     u16 MSN = read(PC + 2);
     u32 address = LSN + (MSN << 4);
+
+    PC += 3;
     return address;
 }
 
@@ -398,6 +421,8 @@ u32 CPU::IND(){
     u16 LSN = read(address);
     u16 MSN = read(address + 1);
     address = LSN + (MSN << 4);
+
+    PC += 2;
     return address;
 }
 
@@ -408,6 +433,8 @@ u32 CPU::IDX(){
     u16 LSN = read(address);
     u16 MSN = read(address + 1);
     address = LSN + (MSN << 4);
+
+    PC += 2;
     return address;
 }
 
@@ -416,6 +443,8 @@ u32 CPU::IDY(){
     u16 LSN = read(PC + 1) + Y;
     u16 MSN = read(PC + 2);
     u32 address = LSN + (MSN << 4);
+
+    PC += 3;
     return address;
 }
 

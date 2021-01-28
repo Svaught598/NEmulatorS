@@ -1,7 +1,7 @@
 #ifndef NES_GUI
 #define NES_GUI
 
-
+class CPU;
 class System;
 
 namespace GUI {
@@ -14,6 +14,7 @@ namespace GUI {
 // GUI State Variables
 extern bool show_demo_window;
 extern bool show_another_window;
+extern bool show_debug_window;
 extern float f;
 extern int counter;
 extern ImVec4 clear_color;
@@ -42,6 +43,7 @@ int Cleanup();
 // Functions that Build GUI
 void ShowDemo();
 void MainMenuBar(System* sys);
+void CPUDebugWindow(CPU &cpu);
 }
 
 #endif

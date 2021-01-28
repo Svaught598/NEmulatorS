@@ -13,6 +13,7 @@ Cart::Cart(char* filepath, std::shared_ptr<Logger> newLogger)
 {   
     boost::format fmt = boost::format("Filename loading: %s") % filepath;
     std::string msg = fmt.str();
+
     // open file stream for rom & extract header data
     *logger << Logger::logType::LOG_INFO << msg;
     std::ifstream rom(filepath);
@@ -29,8 +30,11 @@ Cart::~Cart(){
 
 // reads from the cartridge
 u8 Cart::read(u16 address){
+    std::cout << std::hex << (int) prgRom[address-0x8000] << "  "
+              << std::hex << (int) (address - 0x8000) << std::endl;
     if (address < prgRomSize){
-        return prgRom[address];
+
+        return prgRom[address - 0x8000];
     }
     else {
         return chrRom[address];

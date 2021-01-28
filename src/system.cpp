@@ -73,9 +73,15 @@ int System::mainLoop(){
 
     // GLFW main loop
     while (!glfwWindowShouldClose(GUI::window))
-    {
+    {   
+
+        // GUI Events
         GUI::PollEvents();
         GUI::NewFrame();
+
+        // System Events
+        // if (cartLoaded) 
+        //     cpu->tick();
 
         // Demo Window (set by argument flag `--demo, -d`)
         if (demoMode)
@@ -84,8 +90,12 @@ int System::mainLoop(){
         }
 
         // Main GUI
-        {
-            GUI::MainMenuBar(this); 
+        {   
+            GUI::MainMenuBar(this);
+
+            
+            if (cartLoaded)
+                GUI::CPUDebugWindow(*cpu);
         }
         GUI::Render();
         GUI::SwapBuffers();

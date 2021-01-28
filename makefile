@@ -32,7 +32,7 @@ build: ## builds the project!
 
 valgrind: ## builds the project with compiler flags & runs valgrind
 	$(MAKE) main
-	valgrind --leak-check=full --show-reachable=yes --log-file="memleaks" -q -s ./NES -t 
+	valgrind --leak-check=full --show-reachable=yes --log-file="memleaks" -q -s ./NES -d
 
 
 clean: ## cleans up the intermediate files

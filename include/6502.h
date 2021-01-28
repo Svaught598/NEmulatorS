@@ -24,28 +24,16 @@ public:
     CPU(std::shared_ptr<Bus> newBus);
     ~CPU(){};
 
-    // exposed attributes
+    
     void tick();
     void connectLogger(std::shared_ptr<Logger> newLogger);
     u64 cycles;
-
-private:
-
-    // Bus
-    std::shared_ptr<Bus> bus;
-    std::shared_ptr<Logger> logger;
-
-    // Working variables
     u8 OP;
-
-    // Registers
     u16 PC;
     u8 SP;
     u8 A;
     u8 X;
     u8 Y;
-
-    // Status Flags
     bool C;
     bool Z;
     bool I;
@@ -55,12 +43,21 @@ private:
     bool V;
     bool N;
 
+private:
 
-    void connectBus(std::shared_ptr<Bus> newBus);
+    // Bus
+    std::shared_ptr<Bus> bus;
+    std::shared_ptr<Logger> logger;
+
     u8 read(u32 address);
     void write(u32 address, u8 value);
+
     void execute();
     void fetch();
+
+    void reset();   // https://www.pagetable.com/?p=410
+
+    void logState();
 
     ///////////////////////////////////////////////
     // Opcodes/AddressingModes/UtilityMethods    //
