@@ -55,6 +55,7 @@ void System::setImguiDemo(bool isDemo){
 void System::setTesting(bool isTesting){
     if (isTesting){
         loadCart("./test/nestest.nes");
+        cpu->PC = 0xC000;
         setRunning(true);
     }
 }
@@ -80,8 +81,8 @@ int System::mainLoop(){
         GUI::NewFrame();
 
         // System Events
-        // if (cartLoaded) 
-        //     cpu->tick();
+        if (cartLoaded) 
+            cpu->tick();
 
         // Demo Window (set by argument flag `--demo, -d`)
         if (demoMode)
@@ -93,7 +94,7 @@ int System::mainLoop(){
         {   
             GUI::MainMenuBar(this);
 
-            
+
             if (cartLoaded)
                 GUI::CPUDebugWindow(*cpu);
         }

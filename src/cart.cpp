@@ -30,15 +30,7 @@ Cart::~Cart(){
 
 // reads from the cartridge
 u8 Cart::read(u16 address){
-    std::cout << std::hex << (int) prgRom[address-0x8000] << "  "
-              << std::hex << (int) (address - 0x8000) << std::endl;
-    if (address < prgRomSize){
-
-        return prgRom[address - 0x8000];
-    }
-    else {
-        return chrRom[address];
-    }
+    return prgRom[address - 0xC000];
 }
 
 

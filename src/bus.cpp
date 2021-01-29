@@ -1,5 +1,7 @@
 #include <iostream>
 
+#include <boost/format.hpp>
+
 #include "../include/bus.h"
 #include "../include/6502.h"
 #include "../include/cart.h"
@@ -50,7 +52,6 @@ u8 Bus::read(u16 address){
         // Expansion ROM? idk
     }
     else {
-        cart->read(address);
-        std::cout << "reading from cart" << std::endl;
+        return cart->read(address);
     }
 }

@@ -1,5 +1,7 @@
 #include <stdlib.h>
 #include <memory>
+#include <iomanip>
+#include <iostream>
 
 #include <boost/format.hpp>
 
@@ -36,8 +38,9 @@ void CPU::connectLogger(std::shared_ptr<Logger> newLogger){
 
 void CPU::logState(){
     boost::format fmt = boost::format(                              
-        "PC:%1$#X  OP:%2$#X  SP:%3$#X  A:%4$#X  X:%5$#X  Y:%6$#X"   
-    ) % (int) PC % (int) OP % (int) SP % (int) A % (int) X % (int) Y;
+        "%1$#06X  %2$#04X         A:%4$#04X  X:%5$#04X  Y:%6$#04X  SP:%3$#04X"
+    ) % (int) PC % (int) OP % (int) A % (int) X % (int) Y % (int) SP;
+    //fmt.modify_item(1, std::group(std::setw(4), std::setfill('0')));
     *logger << Logger::logType::LOG_INFO << fmt.str();
 }
 
@@ -325,6 +328,8 @@ void CPU::execute(){
         case 0x8A: TXA(); break;
         case 0x9A: TXS(); break;
         case 0x98: TYA(); break;
+
+        default: NOP(); break;
     }
 }
 
@@ -332,9 +337,6 @@ void CPU::execute(){
 // fetchs opcode at PC address
 void CPU::fetch(){
     OP = read(PC);
-
-    boost::format fmt = boost::format("(in `void CPU::fetch()`) OP:%1$#X") % (int) OP;
-    *logger << Logger::logType::LOG_INFO << fmt.str();
 }
 
 
@@ -397,7 +399,7 @@ u32 CPU::ZPY(){
 u32 CPU::ABS(){
     u16 LSN = read(PC + 1);
     u16 MSN = read(PC + 2);
-    u32 address = LSN + (MSN << 4);
+    u32 address = LSN + (MSN << 8);
 
     PC += 3;
     return address;
@@ -420,7 +422,7 @@ u32 CPU::IND(){
     u32 address = ABS();
     u16 LSN = read(address);
     u16 MSN = read(address + 1);
-    address = LSN + (MSN << 4);
+    address = LSN + (MSN << 8);
 
     PC += 2;
     return address;
@@ -432,7 +434,7 @@ u32 CPU::IDX(){
     address = (address + X) & 0xFF;
     u16 LSN = read(address);
     u16 MSN = read(address + 1);
-    address = LSN + (MSN << 4);
+    address = LSN + (MSN << 8);
 
     PC += 2;
     return address;
@@ -442,7 +444,7 @@ u32 CPU::IDX(){
 u32 CPU::IDY(){
     u16 LSN = read(PC + 1) + Y;
     u16 MSN = read(PC + 2);
-    u32 address = LSN + (MSN << 4);
+    u32 address = LSN + (MSN << 8);
 
     PC += 3;
     return address;
@@ -656,9 +658,13 @@ void CPU::BIT(CPU::AMode mode){
 // Jump
 void CPU::JMP(CPU::AMode mode){
     u32 address = getAddress(mode);
-    u8 M = read(address);
+    
+    std::cout << "++++++++++++++++++++++++++++++++" << std::endl;
+    std::cout << std::hex << (int) address << std::endl;
+    std::cout << "++++++++++++++++++++++++++++++++" << std::endl;;
 
-    PC = M;
+
+    PC = address;
 }
 
 
@@ -856,6 +862,7 @@ void CPU::RTS(){
 void CPU::PHP(){
     u8 status = flagsToByte();
     pushStack(status);
+    PC += 1;
 }
 
 
@@ -863,12 +870,14 @@ void CPU::PHP(){
 void CPU::PLP(){
     u8 status = pullStack();
     byteToFlags(status);
+    PC += 1;
 }
 
 
 // Push Accumulator
 void CPU::PHA(){
     pushStack(A);
+    PC += 1;
 }
 
 
@@ -877,6 +886,7 @@ void CPU::PLA(){
     A = pullStack();
     setZero(A == 0);
     setNegative(A & 0x80);
+    PC += 1;
 }
 
 
@@ -885,6 +895,7 @@ void CPU::DEY(){
     Y = Y - 1;
     if (Y == 0) {setZero(true);}
     if (Y & 0x80) {setNegative(true);}
+    PC += 1;
 }
 
 
@@ -893,6 +904,7 @@ void CPU::TAY(){
     Y = A;
     if (Y == 0) {setZero(true);}
     if (Y & 0x80) {setNegative(true);}
+    PC += 1;
 }
 
 
@@ -901,6 +913,7 @@ void CPU::INY(){
     Y = Y + 1;
     if (Y == 0) {setZero(true);}
     if (Y & 0x80) {setNegative(true);}
+    PC += 1;
 }
 
 
@@ -909,30 +922,35 @@ void CPU::INX(){
     X = X + 1;
     if (X == 0) {setZero(true);}
     if (X & 0x80) {setNegative(true);}
+    PC += 1;
 }
 
 
 // Clear Carry Flag
 void CPU::CLC(){
     setCarry(false);
+    PC += 1;
 }
 
 
 // Set Carry Flag
 void CPU::SEC(){
     setCarry(true);
+    PC += 1;
 }
 
 
 // Clear Interrupt Disable
 void CPU::CLI(){
     setInterrupt(false);
+    PC += 1;
 }
 
 
 // Set Interrupt Disable
 void CPU::SEI(){
     setInterrupt(true);
+    PC += 1;
 }
 
 
@@ -941,24 +959,28 @@ void CPU::TYA(){
     A = Y;
     if (Y == 0) {setZero(true);}
     if (Y & 0x80) {setNegative(true);}
+    PC += 1;
 }
 
 
 // Clear Overflow Flag
 void CPU::CLV(){
     setOverflow(false);
+    PC += 1;
 }
 
 
 // Clear Decimal Mode
 void CPU::CLD(){
     setDecimal(false);
+    PC += 1;
 }
 
 
 // Set Decimal Flag
 void CPU::SED(){
     setDecimal(true);
+    PC += 1;
 }
 
 
@@ -967,12 +989,14 @@ void CPU::TXA(){
     A = X;
     if (A == 0) {setZero(true);}
     if (A & 0x80) {setNegative(true);}
+    PC += 1;
 }
 
 
 // Transfer X to Stack Pointer
 void CPU::TXS(){
     SP = X;
+    PC += 1;
 }
 
 
@@ -981,6 +1005,7 @@ void CPU::TAX(){
     X = A;
     if (X == 0) {setZero(true);}
     if (X & 0x80) {setNegative(true);}
+    PC += 1;
 }
 
 
@@ -989,6 +1014,7 @@ void CPU::TSX(){
     X = SP;
     if (X == 0) {setZero(true);}
     if (X & 0x80) {setNegative(true);}
+    PC += 1;
 }
 
 
@@ -997,10 +1023,12 @@ void CPU::DEX(){
     X = X - 1;
     if (X == 0) {setZero(true);}
     if (X & 0x80) {setNegative(true);}
+    PC += 1;
 }
 
 
 // No Operation
 void CPU::NOP(){
     setOverflow(false);
+    PC += 1;
 }
