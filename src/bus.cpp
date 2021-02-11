@@ -7,28 +7,20 @@
 #include "../include/cart.h"
 
 
-Bus::Bus(){
-    
+Bus::Bus(Logger& newLogger)
+    : logger(newLogger){}
+
+
+Bus::~Bus(){}
+
+
+void Bus::connectCart(Cart& newCart){
+    cart = &newCart;
 }
 
 
-Bus::~Bus(){
-    
-}
-
-
-void Bus::connectCart(std::shared_ptr<Cart> newCart){
-    cart = newCart;
-}
-
-
-void Bus::connectCPU(std::shared_ptr<CPU> newCpu){
-    cpu = newCpu;
-}
-
-
-void Bus::connectLogger(std::shared_ptr<Logger> newLogger){
-    logger = newLogger;
+void Bus::connectCPU(CPU& newCpu){
+    cpu = &newCpu;
 }
 
 

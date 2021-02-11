@@ -17,10 +17,10 @@
 
 
 // constructor
-CPU::CPU(std::shared_ptr<Bus> newBus)
-    : PC(0xFFFC), SP(0xFD), A(0), X(0), Y(0), cycles(0)
-    , C(0), Z(0), I(1), D(0), B(0), U(0), V(0), N(0)
-    , bus(newBus){}
+CPU::CPU(Bus& newBus, Logger& newLogger)
+    : PC(0xFFFC), prevPC(0), SP(0xFD), A(0), X(0), Y(0), cycles(0)
+    , C(0), Z(0), I(1), D(0), B(0), U(0), V(0), N(0)            
+    , bus(&newBus), logger(newLogger){}
 
 // fetch & execute opcode
 void CPU::tick(){
@@ -30,18 +30,12 @@ void CPU::tick(){
 }
 
 
-// connect system logger for logging stuff
-void CPU::connectLogger(std::shared_ptr<Logger> newLogger){
-    logger = newLogger;
-}
-
-
 void CPU::logState(){
     boost::format fmt = boost::format(                              
         "%1$#06X  %2$#04X         A:%4$#04X  X:%5$#04X  Y:%6$#04X  SP:%3$#04X"
-    ) % (int) PC % (int) OP % (int) A % (int) X % (int) Y % (int) SP;
+    ) % (int) prevPC % (int) OP % (int) A % (int) X % (int) Y % (int) SP;
     //fmt.modify_item(1, std::group(std::setw(4), std::setfill('0')));
-    *logger << Logger::logType::LOG_INFO << fmt.str();
+    logger << Logger::logType::LOG_INFO << fmt.str();
 }
 
 
@@ -147,6 +141,7 @@ void CPU::pushStack(u8 value){
 
 // Exectutes current opcode
 void CPU::execute(){
+    prevPC = PC;
     switch (OP) {
         // MULTIPLE ADDRESSING MODES
         case 0x69: ADC(_IMM); break;
@@ -717,88 +712,88 @@ void CPU::CPX(CPU::AMode mode){
 
 // Branch if Positive
 void CPU::BPL(CPU::AMode mode){
-    u32 address = getAddress(mode);
-    u8 M = read(address);
-
     if (!N) {
-        PC += M;
+        PC = getAddress(mode);
+    }
+    else {
+        PC += 2;
     }
 }
 
 
 // Branch if Minus
 void CPU::BMI(CPU::AMode mode){
-    u32 address = getAddress(mode);
-    u8 M = read(address);
-
     if (N) {
-        PC += M;
+        PC = getAddress(mode);
+    }
+    else {
+        PC += 2;
     }
 }
 
 
 // Branch if Overflow Clear
 void CPU::BVC(CPU::AMode mode){
-    u32 address = getAddress(mode);
-    u8 M = read(address);
-
     if (!V) {
-        PC += M;
+        PC = getAddress(mode);
+    }
+    else {
+        PC += 2;
     }
 }
 
 
 // Branch if Overflow Set
 void CPU::BVS(CPU::AMode mode){
-    u32 address = getAddress(mode);
-    u8 M = read(address);
-
     if (V) {
-        PC += M;
+        PC = getAddress(mode);
+    }
+    else {
+        PC += 2;
     }
 }
 
 
 // Branch if Carry Clear
 void CPU::BCC(CPU::AMode mode){
-    u32 address = getAddress(mode);
-    u8 M = read(address);
-
     if (!C) {
-        PC += M;
+        PC = getAddress(mode);
+    }
+    else {
+        PC += 2;
     }
 }
 
 
 // Branch if Carry Set
 void CPU::BCS(CPU::AMode mode){
-    u32 address = getAddress(mode);
-    u8 M = read(address);
-
     if (C) {
-        PC += M;
+        PC = getAddress(mode);
+    }
+    else {
+        PC += 2;
     }
 }
 
 
 // Branch if Not Equal
 void CPU::BNE(CPU::AMode mode){
-    u32 address = getAddress(mode);
-    u8 M = read(address);
-
     if (!Z) {
-        PC += M;
+        PC = getAddress(mode);
+    }
+    else {
+        PC += 2;
     }
 }
 
 
 // Branch if Equal
 void CPU::BEQ(CPU::AMode mode){
-    u32 address = getAddress(mode);
-    u8 M = read(address);
-
     if (Z) {
-        PC += M;
+        PC = getAddress(mode);
+    }
+    else {
+        PC += 2;
     }
 }
 

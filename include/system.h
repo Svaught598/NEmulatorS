@@ -25,7 +25,7 @@ class System
     */
 public:
 
-    System(std::string name, std::shared_ptr<Logger> newLogger);
+    System(std::string name, Logger& newLogger);
     ~System(){};
 
     void loadCart(char* filepath);
@@ -39,10 +39,10 @@ public:
 private:
 
     // NES components
-    std::shared_ptr<Bus> bus;
-    std::shared_ptr<CPU> cpu;
-    std::shared_ptr<Cart> cart;
-    std::shared_ptr<Logger> logger;
+    std::unique_ptr<Bus> bus;
+    std::unique_ptr<CPU> cpu;
+    std::unique_ptr<Cart> cart;
+    Logger& logger;
 
     // State Variables
     std::string systemName;

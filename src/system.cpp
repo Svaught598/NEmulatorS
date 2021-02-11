@@ -6,17 +6,12 @@
 #include "../include/gui.h"
 
 
-System::System(std::string name, std::shared_ptr<Logger> newLogger)
-    : systemName(name)
-    , logger(newLogger)
+System::System(std::string name, Logger& newLogger)
+    : systemName(name), logger(newLogger)
 {
-    bus = std::make_shared<Bus>();
-    cpu = std::make_shared<CPU>(bus);
-
-    cpu->connectLogger(logger);
-    bus->connectLogger(logger);
-
-    *logger << Logger::logType::LOG_INFO << "System initialized!";
+    bus = std::make_unique<Bus>(logger);
+    cpu = std::make_unique<CPU>(*bus, logger);
+    logger << Logger::logType::LOG_INFO << "System initialized!";
 }
 
 
@@ -27,9 +22,8 @@ System::System(std::string name, std::shared_ptr<Logger> newLogger)
 
 // load cart from filepath (for testing)
 void System::loadCart(char* filepath){
-    cart = std::make_shared<Cart>(filepath, logger);
-
-    bus->connectCart(cart);
+    cart = std::make_unique<Cart>(filepath, logger);
+    bus->connectCart(*cart);
     cartLoaded = true;
 }
 
@@ -37,9 +31,9 @@ void System::loadCart(char* filepath){
 // load cart from filesystem selection window
 void System::loadCart(){
     char* filepath = openFileSystem();
-    cart = std::make_shared<Cart>(filepath, logger);
+    cart = std::make_unique<Cart>(filepath, logger);
 
-    bus->connectCart(cart);
+    bus->connectCart(*cart);
     cartLoaded = true;
     delete filepath;
 }

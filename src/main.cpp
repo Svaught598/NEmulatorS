@@ -21,8 +21,8 @@ int printUsage(){
 
 int main(int argc, char *argv[]){
 
-    std::shared_ptr<Logger> logger = std::make_shared<Logger>();
-    System nes = System("NES", logger);
+    std::unique_ptr<Logger> logger = std::make_unique<Logger>();
+    System nes("NES", *logger);
 
     if(argc == 2){ 
         std::string argument = argv[1];

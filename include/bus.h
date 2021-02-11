@@ -18,22 +18,20 @@ class Bus
 
 public:
 
-    Bus();
+    Bus(Logger& newLogger);
     ~Bus();
 
-    void connectCart(std::shared_ptr<Cart> newCart);
-    void connectCPU(std::shared_ptr<CPU> newCpu);
-    void connectLogger(std::shared_ptr<Logger> newLogger);
+    void connectCart(Cart& newCart);
+    void connectCPU(CPU& newCpu);
 
     void write(u16 address, u8 data);
     u8 read(u16 address);
 
 private:
 
-    std::shared_ptr<Cart> cart;
-    std::shared_ptr<CPU> cpu;
-    std::shared_ptr<Logger> logger;
-
+    Cart* cart = nullptr;
+    CPU* cpu = nullptr;
+    Logger& logger;
     u8 mram[0x2000];
 };
 

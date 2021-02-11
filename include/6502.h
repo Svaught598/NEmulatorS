@@ -21,15 +21,16 @@ class CPU
 public:
 
     // constructor/destructor
-    CPU(std::shared_ptr<Bus> newBus);
+    CPU(Bus& newBus, Logger& newLogger);
     ~CPU(){};
 
     
     void tick();
-    void connectLogger(std::shared_ptr<Logger> newLogger);
+    void connectLogger(Logger& newLogger);
     u64 cycles;
     u8 OP;
     u16 PC;
+    u16 prevPC;
     u8 SP;
     u8 A;
     u8 X;
@@ -45,9 +46,8 @@ public:
 
 private:
 
-    // Bus
-    std::shared_ptr<Bus> bus;
-    std::shared_ptr<Logger> logger;
+    Bus* bus = nullptr;
+    Logger& logger;
 
     u8 read(u32 address);
     void write(u32 address, u8 value);

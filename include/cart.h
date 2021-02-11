@@ -22,18 +22,16 @@ class Cart
     */
 public:
 
-    Cart();
-    Cart(char *filename, std::shared_ptr<Logger> newLogger);
+    Cart(Logger& newLogger);
+    Cart(char *filename, Logger& newLogger);
     ~Cart();
 
     u8 read(u16 address);
 
 private:
 
-    
-    BasicMapper mapper;
-    std::shared_ptr<Logger> logger;
-
+    std::unique_ptr<BasicMapper> mapper;
+    Logger& logger;
     u32 prgRomSize;
     u32 chrRomSize;
     std::vector<u8> header;
@@ -41,13 +39,10 @@ private:
     std::vector<u8> chrRom;
     bool mirroring;
     
-    
     void getHeaderData(std::ifstream &ifs);
     void getRomData(std::ifstream &ifs);
     void getMapper();
-
     void printHeader();
-
 };
 
 #endif
