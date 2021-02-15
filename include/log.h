@@ -2,6 +2,8 @@
 #define NES_LOG
 
 #include <fstream>
+#include <iomanip>
+#include <iostream>
 
 
 class Logger
@@ -10,7 +12,7 @@ public:
 
     // Log types
     enum class logType {
-        LOG_ERROR, LOG_WARNING, LOG_OPCODE, LOG_INFO
+        LOG_ERROR, LOG_WARNING, LOG_OPCODE, LOG_INFO, LOG_ENDLINE
     };
 
     // Constructor
@@ -53,8 +55,13 @@ public:
             case Logger::logType::LOG_OPCODE:
                 logger.myFile << "[OPCODE]: ";
                 break;
-            default:
+            case Logger::logType::LOG_INFO:
                 logger.myFile << "[INFO]: ";
+                break;
+            case Logger::logType::LOG_ENDLINE:
+                logger.myFile << std::endl;
+                break;
+            default:
                 break;
         }
         return logger;
@@ -63,12 +70,21 @@ public:
 
     // Overload << operator using char* strings
     friend Logger &operator << (Logger &logger, const char *text) {
-        logger.myFile << text << std::endl;
+        logger.myFile << text;
         return logger;
     }
 
     friend Logger &operator << (Logger &logger, const std::string &text){
-        logger.myFile << text << std::endl;
+        logger.myFile << text;
+        return logger;
+    }
+
+    friend Logger &operator << (Logger &logger, const int &val){
+        if (val < 0x100){
+            logger.myFile << std::hex << std::setfill('0') << std::setw(2) << val;
+        } else {
+            logger.myFile << std::hex << std::setfill('0') << std::setw(4) << val;
+        }
         return logger;
     }
 

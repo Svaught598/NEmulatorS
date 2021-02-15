@@ -15,7 +15,9 @@ Cart::Cart(char* filepath, Logger& newLogger)
     std::string msg = fmt.str();
 
     // open file stream for rom & extract header data
-    logger << Logger::logType::LOG_INFO << msg;
+    logger << Logger::logType::LOG_INFO
+        << msg
+        << Logger::logType::LOG_ENDLINE;
     std::ifstream rom(filepath);
     getHeaderData(rom);
     getRomData(rom);

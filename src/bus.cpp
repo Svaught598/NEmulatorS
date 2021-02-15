@@ -26,14 +26,14 @@ void Bus::connectCPU(CPU& newCpu){
 
 void Bus::write(u16 address, u8 data){
     if (address < 0x2000){
-        mram[address] = data;
+        mram[address & 0x07FF] = data;
     }
 }
 
 
 u8 Bus::read(u16 address){
     if (address < 0x2000){
-        return mram[address];
+        return mram[address & 0x07FF];
     }
     else if (address < 0x4020){
         // TODO: PPU memory, mirrored every 8

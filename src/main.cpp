@@ -27,11 +27,15 @@ int main(int argc, char *argv[]){
     if(argc == 2){ 
         std::string argument = argv[1];
         if (argument == "--demo" || argument == "-d"){
-            *logger << Logger::logType::LOG_INFO << "ImGui demo mode set";
+            *logger << Logger::logType::LOG_INFO
+                << "ImGui demo mode set"
+                << Logger::logType::LOG_ENDLINE;
             nes.setImguiDemo(true);
         }
         else if (argument == "--test" || argument == "-t"){
-            *logger << Logger::logType::LOG_INFO << "Running Blargs tests";
+            *logger << Logger::logType::LOG_INFO
+                << "Running Blargs tests"
+                << Logger::logType::LOG_ENDLINE;
             nes.setTesting(true);
         }
         else if (argument == "--help" || argument == "-h"){

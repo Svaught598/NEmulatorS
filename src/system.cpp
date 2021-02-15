@@ -11,7 +11,9 @@ System::System(std::string name, Logger& newLogger)
 {
     bus = std::make_unique<Bus>(logger);
     cpu = std::make_unique<CPU>(*bus, logger);
-    logger << Logger::logType::LOG_INFO << "System initialized!";
+    logger << Logger::logType::LOG_INFO
+        << "System initialized!"
+        << Logger::logType::LOG_ENDLINE;
 }
 
 
