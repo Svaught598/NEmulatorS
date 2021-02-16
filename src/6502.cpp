@@ -437,9 +437,9 @@ void CPU::ADC(CPU::AMode mode){
     u32 address = getAddress(mode);
     u8 M = read(address);
     
-    bool C = P & 0x01;
+    u8 C = P & 0x01;
     u16 result = A+M+C;
-    setZero(result == 0);
+    setZero((result & 0xFF) == 0);
     setCarry(result & 0x100);
     setNegative(result & 0x80);
     setOverflow(!((M^A) & 0x80) && ((M^result) & 0x80));
@@ -480,14 +480,14 @@ void CPU::CMP(CPU::AMode mode){
 // Subtract With Carry
 void CPU::SBC(CPU::AMode mode){
     u32 address = getAddress(mode);
-    u8 M = read(address);
+    u8 M = read(address) ^ 0xFF;
     
-    bool C = P & 0x01;
-    u16 result = A-M-(1-C);
-    setZero(result == 0);
-    setCarry(!(result & 0x100));
+    u8 C = P & 0x01;
+    u16 result = A+M+C;
+    setZero((result & 0xFF) == 0);
+    setCarry(result & 0x100);
     setNegative(result & 0x80);
-    setOverflow(!((C^A) & 0x80) && ((A^result) & 0x80));
+    setOverflow((result ^ A) & ((result ^ M) & 0x80));
     A = (u8) result & 0xFF;
 }
 

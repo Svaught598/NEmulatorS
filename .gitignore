@@ -36,3 +36,5 @@
 
 # this project specifically
 NES
+memleaks
+*.txt
