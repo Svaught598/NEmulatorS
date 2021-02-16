@@ -755,7 +755,6 @@ void CPU::BRK(){
     pushStack(PC & 0x00FF);
     pushStack((PC & 0xFF00) >> 8);
     pushStack(P | 0x30);
-    setBreak(true);
     PC = IRQ_INTERRUPT;
 }
 
@@ -764,29 +763,22 @@ void CPU::BRK(){
 void CPU::JSR(){
     AMode mode = _ABS;
     u32 address = getAddress(mode);
-
-    u16 returnPoint = PC;
-    u8 LSN = returnPoint & 0x00FF;
-    u8 MSN = (returnPoint & 0xFF00) >> 8;
-
-    pushStack(LSN);
-    pushStack(MSN);
+    pushStack(((PC-1) & 0xFF00) >> 8);
+    pushStack((PC-1) & 0x00FF);
     PC = (u16) address;
 }
 
 
 // Return from Interrupt
 void CPU::RTI(){
-    P = pullStack() & ~0x10;
-    PC = (pullStack() << 8) + pullStack();
+    P = pullStack() & ~0x10 | 0x20;
+    PC = pullStack() + (pullStack() << 8);
 }
 
 
 // Return from Subroutine
 void CPU::RTS(){
-    u8 MSN = pullStack();
-    u8 LSN = pullStack();
-    PC = LSN + (MSN << 8);
+    PC = pullStack() + (pullStack() << 8) + 1;
 }
 
 ///////////////////////////////////////////////
