@@ -389,9 +389,9 @@ u32 CPU::IDX(){
 // Indirect Y
 u32 CPU::IDY(){
     u16 temp = read(PC + 1);
-    u16 LSN = read(temp) + Y;
-    u16 MSN = read(temp + 1);
-    u32 address = LSN + (MSN << 8);
+    u16 LSN = read(temp);
+    u16 MSN = read((temp + 1) & 0xFF);
+    u32 address = LSN + (MSN << 8) + Y;
     PC += 2;
     return address;
 }
