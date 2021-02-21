@@ -378,11 +378,10 @@ u32 CPU::IND(){
 
 // Indirect X
 u32 CPU::IDX(){
-    u32 address = read(PC + 1);
-    address = (address + X) & 0xFF;
+    u32 address = (read(PC + 1) + X) & 0xFF;
     u16 LSN = read(address);
-    u16 MSN = read(address + 1);
-    address = LSN + (MSN << 8);
+    u16 MSN = read((address + 1) & 0xFF);
+    address = (MSN << 8) + LSN;
     PC += 2;
     return address;
 }
