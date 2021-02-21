@@ -32,7 +32,15 @@ Cart::~Cart(){
 
 // reads from the cartridge
 u8 Cart::read(u16 address){
-    return prgRom[address - 0xC000];
+    mapper->getMappedAddress(address);
+    return prgRom[address];
+}
+
+
+void Cart::write(u16 address, u8 data){
+    mapper->getMappedAddress(address);
+    // TODO: writing support for on-cart RAM
+    // for now, do nothing
 }
 
 
@@ -54,7 +62,7 @@ void Cart::getMapper(){
     u8 mapperID = (header[6] & 0xF0) >> 4 | (header[7] & 0xF0);
 
     switch (mapperID){
-        case 0: Mapper000(mapper); break;
+        case 0: mapper = std::make_unique<Mapper000>(header[4], header[5]); break;
         default: std::cout << "FUCK THAT ROM" << std::endl; break;
     }
 }
