@@ -235,6 +235,8 @@ void GUI::CPUDebugWindow(CPU &cpu){
     ImGui::Text("A = %x", cpu.A);
     ImGui::Text("X = %x", cpu.X);
     ImGui::Text("Y = %x", cpu.Y);
+    ImGui::Text("02h: %x", cpu.error1);
+    ImGui::Text("03h: %x", cpu.error2);
     
     if (ImGui::Button("Step CPU")){
         cpu.tick();

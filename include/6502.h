@@ -38,6 +38,8 @@ public:
     u8 X;
     u8 Y;
     u8 P;
+    u8 error1;
+    u8 error2;
 
 private:
 

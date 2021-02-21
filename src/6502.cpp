@@ -19,6 +19,7 @@
 // constructor
 CPU::CPU(Bus& newBus, Logger& newLogger)
     : PC(0xFFFC), prevPC(0), SP(0xFD), A(0), X(0), Y(0), P(0x24), cycles(0)
+    , error1(0), error2(0)
     , bus(&newBus), logger(newLogger){}
 
 // fetch & execute opcode
@@ -26,6 +27,8 @@ void CPU::tick(){
     fetch();
     logState();
     execute();
+    error1 = read(0x02);
+    error2 = read(0x03);
 }
 
 
@@ -368,7 +371,7 @@ u32 CPU::IND(){
     u32 address = ABS();
     u16 LSN = read(address);
     u16 MSN = read(address + 1);
-    address = LSN + (MSN << 8);
+    address = (LSN + (MSN << 8)) & 0xFF;
     PC += 2;
     return address;
 }
@@ -386,10 +389,11 @@ u32 CPU::IDX(){
 
 // Indirect Y
 u32 CPU::IDY(){
-    u16 LSN = read(PC + 1) + Y;
-    u16 MSN = read(PC + 2);
+    u16 temp = read(PC + 1);
+    u16 LSN = read(temp) + Y;
+    u16 MSN = read(temp + 1);
     u32 address = LSN + (MSN << 8);
-    PC += 3;
+    PC += 2;
     return address;
 }
 
@@ -498,8 +502,8 @@ void CPU::ASL(CPU::AMode mode){
     u8 M = read(address);
 
     setCarry(M & 0x80);
-    setZero(M == 0);
     M = M << 1;
+    setZero(M == 0);
     setNegative(M & 0x80);
     write(address, M);
 }
@@ -510,9 +514,9 @@ void CPU::ROL(CPU::AMode mode){
     u32 address = getAddress(mode);
     u8 M = read(address);
 
-    bool C = P & 0x01;
+    u8 C = P & 0x01;
     bool carry = M & 0x80;
-    M = (C) ? (M << 1) + 1 : (M << 1);
+    M = (M << 1) + C;
     setZero(M == 0);
     setCarry(carry);
     setNegative(M & 0x80);
@@ -539,9 +543,9 @@ void CPU::ROR(CPU::AMode mode){
     u32 address = getAddress(mode);
     u8 M = read(address);
     
-    bool C = P & 0x01;
+    u8 C = P & 0x01;
     bool carry = M & 1;
-    M = (C) ? (M << 1) + 0x80 : (M << 1);
+    M = (M >> 1) + (C << 7);
     setCarry(carry);
     setZero(M == 0);
     setNegative(M & 0x80);
@@ -647,7 +651,7 @@ void CPU::CPX(CPU::AMode mode){
     
     u8 result = X - M;
     setCarry(X >= M);
-    setZero(X == M);
+    setZero(result == 0);
     setNegative(result & 0x80);
 }
 
