@@ -194,7 +194,7 @@ void CPU::execute(){
 
         case 0x4A: LSR(_ACC); break;
         case 0x46: LSR(_ZPG); break;
-        case 0x56: LSR(_ZPY); break;
+        case 0x56: LSR(_ZPX); break;
         case 0x4E: LSR(_ABS); break;        
         case 0x5E: LSR(_ABX); break;
 
