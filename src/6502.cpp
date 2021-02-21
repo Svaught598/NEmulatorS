@@ -270,7 +270,6 @@ void CPU::execute(){
         case 0x88: DEY(); break;
         case 0xE8: INX(); break;
         case 0xC8: INY(); break;
-        case 0xEA: NOP(); break;
         case 0x48: PHA(); break;
         case 0x08: PHP(); break;
         case 0x68: PLA(); break;
@@ -284,6 +283,39 @@ void CPU::execute(){
         case 0x8A: TXA(); break;
         case 0x9A: TXS(); break;
         case 0x98: TYA(); break;
+
+        // various NOP instructions
+        case 0xEA: NOP(); break;
+        case 0x04: NOP(); PC+=1; break;
+        case 0x44: NOP(); PC+=1; break;
+        case 0x64: NOP(); PC+=1; break;
+        case 0x80: NOP(); PC+=1; break;
+        case 0x82: NOP(); PC+=1; break;
+        case 0xC2: NOP(); PC+=1; break;
+        case 0xE2: NOP(); PC+=1; break;
+        case 0x89: NOP(); PC+=1; break;
+        case 0x0C: NOP(); PC+=2; break;
+        case 0x14: NOP(); PC+=1; break;
+        case 0x34: NOP(); PC+=1; break;
+        case 0x54: NOP(); PC+=1; break;
+        case 0x74: NOP(); PC+=1; break;
+        case 0xD4: NOP(); PC+=1; break;
+        case 0xF4: NOP(); PC+=1; break;
+        case 0x1A: NOP(); break;
+        case 0x3A: NOP(); break;
+        case 0x5A: NOP(); break;
+        case 0x7A: NOP(); break;
+        case 0xDA: NOP(); break;
+        case 0xFA: NOP(); break;
+        case 0x1C: NOP(); PC+=2; break;
+        case 0x3C: NOP(); PC+=2; break;
+        case 0x5C: NOP(); PC+=2; break;
+        case 0x7C: NOP(); PC+=2; break;
+        case 0xDC: NOP(); PC+=2; break;
+        case 0xFC: NOP(); PC+=2; break;
+
+
+
 
         default: NOP(); break;
     }
