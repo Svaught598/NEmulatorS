@@ -368,10 +368,21 @@ u32 CPU::ABY(){
 
 // Indirect
 u32 CPU::IND(){
-    u32 address = ABS();
-    u16 LSN = read(address);
-    u16 MSN = read(address + 1);
-    address = (LSN + (MSN << 8)) & 0xFF;
+    u16 ABS_LSN = read(PC + 1);
+    u16 ABS_MSN = read(PC + 2);
+    u32 ABS_address = (ABS_MSN << 8) + ABS_LSN;
+
+    // AN INDIRECT JUMP MUST NEVER USE A VECTOR BEGINNING ON THE LAST BYTE OF A PAGE
+    u16 address, LSN, MSN;
+    if ((ABS_address & 0xFF) == 0xFF){
+        LSN = read(ABS_address);
+        MSN = read(ABS_address & 0xFF00);
+        address = (MSN << 8) + LSN;
+    } else {
+        LSN = read(ABS_address);
+        MSN = read(ABS_address + 1);
+        address = (MSN << 8) + LSN;
+    }
     PC += 2;
     return address;
 }
