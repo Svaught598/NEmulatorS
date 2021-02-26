@@ -4,6 +4,7 @@
 
 #include "../include/system.h"
 #include "../include/gui.h"
+#include "../include/ppu.h"
 
 
 System::System(std::string name, Logger& newLogger)
@@ -11,6 +12,7 @@ System::System(std::string name, Logger& newLogger)
 {
     bus = std::make_unique<Bus>(logger);
     cpu = std::make_unique<CPU>(*bus, logger);
+    ppu = std::make_unique<PPU>(*bus, logger);
     logger << Logger::logType::LOG_INFO
         << "System initialized!"
         << Logger::logType::LOG_ENDLINE;

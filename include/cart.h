@@ -17,9 +17,6 @@
 
 class Cart
 {
-    /**
-     * Cartridge class
-    */
 public:
 
     Cart(Logger& newLogger);

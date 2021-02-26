@@ -22,6 +22,7 @@ CPU::CPU(Bus& newBus, Logger& newLogger)
     , error1(0), error2(0)
     , bus(&newBus), logger(newLogger){}
 
+
 // fetch & execute opcode
 void CPU::tick(){
     fetch();
@@ -313,10 +314,6 @@ void CPU::execute(){
         case 0x7C: NOP(); PC+=2; break;
         case 0xDC: NOP(); PC+=2; break;
         case 0xFC: NOP(); PC+=2; break;
-
-
-
-
         default: NOP(); break;
     }
 }

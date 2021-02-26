@@ -20,20 +20,20 @@
 
 class System
 {
-    /**
-     * Singleton System Class
-    */
 public:
 
     System(std::string name, Logger& newLogger);
     ~System(){};
 
+    // tied to GUI controls
     void loadCart(char* filepath);
     void loadCart();
 
+    // tied to command line arguments
     void setImguiDemo(bool isDemo);
     void setTesting(bool isTesting);
 
+    // tied to `int main()`
     int mainLoop();
     
 private:
@@ -41,6 +41,7 @@ private:
     // NES components
     std::unique_ptr<Bus> bus;
     std::unique_ptr<CPU> cpu;
+    std::unique_ptr<PPU> ppu;
     std::unique_ptr<Cart> cart;
     Logger& logger;
 

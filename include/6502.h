@@ -28,7 +28,7 @@ public:
 
     
     void tick();
-    void connectLogger(Logger& newLogger);
+
     u64 cycles;
     u8 OP;
     u16 PC;
@@ -48,17 +48,10 @@ private:
 
     u8 read(u32 address);
     void write(u32 address, u8 value);
-
     void execute();
     void fetch();
-
     void reset();   // https://www.pagetable.com/?p=410
-
     void logState();
-
-    ///////////////////////////////////////////////
-    // Opcodes/AddressingModes/UtilityMethods    //
-    ///////////////////////////////////////////////
 
     // Flag related methods
     void setCarry(bool val)    {P = (val) ? P | 0x01 : P & ~0x01;}
@@ -104,6 +97,7 @@ private:
         _ACC = 11,
     };
 
+    // handles enum addressing modes and returns correct function
     u32 getAddress(AMode &mode){
         switch (mode) {
             case _IMM: return IMM();
@@ -190,7 +184,7 @@ private:
     void DEX(); 
     void NOP();
 
-
+    // key opcode maps to correct mnemoic for logging
     std::unordered_map<u8, std::string> mnemonic = {
         {0x69, "ADC"},
         {0x65, "ADC"},

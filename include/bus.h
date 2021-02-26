@@ -12,10 +12,6 @@
 
 class Bus
 {
-    /**
-     * Bus class
-    */
-
 public:
 
     Bus(Logger& newLogger);
@@ -23,7 +19,6 @@ public:
 
     void connectCart(Cart& newCart);
     void connectCPU(CPU& newCpu);
-
     void write(u16 address, u8 data);
     u8 read(u16 address);
 
@@ -33,6 +28,7 @@ private:
     CPU* cpu = nullptr;
     Logger& logger;
     u8 mram[0x2000];
+
 };
 
 #endif
