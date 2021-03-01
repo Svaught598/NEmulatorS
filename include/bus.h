@@ -27,7 +27,7 @@ private:
     Cart* cart = nullptr;
     CPU* cpu = nullptr;
     Logger& logger;
-    u8 mram[0x2000];
+    u8 mram[0x800];
 
 };
 
