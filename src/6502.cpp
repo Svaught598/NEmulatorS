@@ -20,7 +20,10 @@
 CPU::CPU(Bus& newBus, Logger& newLogger)
     : PC(0xFFFC), prevPC(0), SP(0xFD), A(0), X(0), Y(0), P(0x24), cycles(0)
     , error1(0), error2(0)
-    , bus(&newBus), logger(newLogger){}
+    , bus(&newBus), logger(newLogger)
+{
+    bus->connectCPU(*this);
+}
 
 
 // fetch & execute opcode

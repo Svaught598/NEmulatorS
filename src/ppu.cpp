@@ -4,7 +4,15 @@
 
 // constructor
 PPU::PPU(Bus& newBus, Logger& newLogger)
-    : bus(&newBus), logger(newLogger){}
+    : bus(&newBus), logger(newLogger)
+{
+    bus->connectPPU(*this);
+}
+
+
+void PPU::connectCart(Cart& newCart){
+    cart = &newCart;
+}
 
 
 // writing to registers
@@ -85,4 +93,14 @@ u8 PPU::readFromRegisters(u8 reg){
             return value;
             break;
     }
+}
+
+
+u8 PPU::read(u16 address){
+
+}
+
+
+void PPU::write(u16 address, u8 value){
+
 }

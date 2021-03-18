@@ -28,6 +28,7 @@ System::System(std::string name, Logger& newLogger)
 void System::loadCart(char* filepath){
     cart = std::make_unique<Cart>(filepath, logger);
     bus->connectCart(*cart);
+    ppu->connectCart(*cart);
     cartLoaded = true;
 }
 
@@ -38,6 +39,7 @@ void System::loadCart(){
     cart = std::make_unique<Cart>(filepath, logger);
 
     bus->connectCart(*cart);
+    ppu->connectCart(*cart);
     cartLoaded = true;
     delete filepath;
 }

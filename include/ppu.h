@@ -3,6 +3,7 @@
 
 #include "typedefs.h"
 #include "log.h"
+#include "cart.h"
 
 
 // circular include if I #include "bus.h"
@@ -17,15 +18,17 @@ public:
     PPU(Bus& newBus, Logger& newLogger);
     ~PPU();
 
+    void connectCart(Cart& newCart);
     void tick();
     void writeToRegisters(u8 reg, u8 value);
     u8 readFromRegisters(u8 reg);
-    void write(u8 address, u8 value);
-    u8 read(u8 address);
+    void write(u16 address, u8 value);
+    u8 read(u16 address);
 
 private:
 
     Bus* bus = nullptr;
+    Cart* cart = nullptr;
     Logger& logger;
 
     // registers
