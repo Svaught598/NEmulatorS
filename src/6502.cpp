@@ -63,7 +63,7 @@ u8 CPU::read(u32 address){
     }
     else {
         u16 trueAddress = (u16) address;
-        return bus->read(address);
+        return bus->read(trueAddress);
     }
 }
 
@@ -75,7 +75,7 @@ void CPU::write(u32 address, u8 value){
     }
     else {
         u16 trueAddress = (u16) address;
-        bus->write(address, value);
+        bus->write(trueAddress, value);
     }
 }
 
@@ -817,7 +817,7 @@ void CPU::JSR(){
 
 // Return from Interrupt
 void CPU::RTI(){
-    P = pullStack() & ~0x10 | 0x20;
+    P = (pullStack() & ~0x10) | 0x20;
     PC = pullStack() + (pullStack() << 8);
 }
 
@@ -841,7 +841,7 @@ void CPU::PHP(){
 
 // Pull Processor Status
 void CPU::PLP(){
-    P = pullStack() & ~0x10 | 0x20;
+    P = (pullStack() & ~0x10) | 0x20;
     PC += 1;
 }
 
