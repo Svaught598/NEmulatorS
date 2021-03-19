@@ -6,6 +6,7 @@
 
 #include "typedefs.h"
 #include "6502.h"
+#include "ppu.h"
 #include "cart.h"
 #include "log.h"
 
