@@ -9,22 +9,6 @@
 #include "../include/gui.h"
 #include "../include/system.h"
 
-///////////////////////////////////////////////
-// GUI Variables                             //
-///////////////////////////////////////////////
-
-
-// State Variable
-namespace GUI {
-    bool show_demo_window = true;
-    bool show_another_window = true;
-    bool show_debug_window = true;
-    float f = 0.0f;
-    int counter = 0;
-    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
-    char* glsl_version = "#version 130";
-    GLFWwindow* window = nullptr;
-}
 
 ///////////////////////////////////////////////
 // GUI  Functions                            //
@@ -229,17 +213,27 @@ void GUI::MainMenuBar(System* sys){
 
 void GUI::CPUDebugWindow(CPU &cpu){
     ImGui::Begin("CPU Debug Window", &show_debug_window); 
-    ImGui::Text("Last Executed Opcode %x", cpu.OP);
-    ImGui::Text("PC = %x", cpu.PC);  
-    ImGui::Text("SP = %x", cpu.SP);
-    ImGui::Text("A = %x", cpu.A);
-    ImGui::Text("X = %x", cpu.X);
-    ImGui::Text("Y = %x", cpu.Y);
-    ImGui::Text("02h: %x", cpu.error1);
-    ImGui::Text("03h: %x", cpu.error2);
-    
-    if (ImGui::Button("Step CPU")){
-        cpu.tick();
+    {
+        ImGui::Text("Last Executed Opcode %x", cpu.OP);
+        ImGui::Text("PC = %x", cpu.PC);  
+        ImGui::Text("SP = %x", cpu.SP);
+        ImGui::Text("A = %x", cpu.A);
+        ImGui::Text("X = %x", cpu.X);
+        ImGui::Text("Y = %x", cpu.Y);
+        ImGui::Text("02h: %x", cpu.error1);
+        ImGui::Text("03h: %x", cpu.error2);
+        if (ImGui::Button("Step CPU")) cpu.tick();
     }
     ImGui::End();
+}
+
+
+void GUI::PpuDebugWindow(PPU &ppu){
+    ImGui::Begin("PPU Debug Window", &show_debug_window);
+    {
+        ImGui::Image((ImTextureID)(ppu.renderNT1()), ImVec2(80 * 2.f, 72 * 2.f));
+        ImGui::Image((ImTextureID)(ppu.renderNT2()), ImVec2(80 * 2.f, 72 * 2.f));
+    }
+    ImGui::End();
+    
 }

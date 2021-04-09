@@ -44,6 +44,20 @@ void Cart::write(u16 address, u8 data){
 }
 
 
+u8 Cart::readPPU(u16 address){
+    // kinda hacky temporary solution for getting nametables 
+    // to screen. Should be using Mapper for mapping addresses
+    return chrRom[address];
+}
+
+
+void Cart::writePPU(u16 address, u8 data){
+    // Probably not needed, but boilerplate here 
+    // just in case
+    // TODO: Figure out if I need this method
+}
+
+
 // gets the header data from the rom stream
 void Cart::getHeaderData(std::ifstream &ifs){
     char buffer[NES_HEADER_SIZE];

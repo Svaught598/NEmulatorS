@@ -2,48 +2,47 @@
 #define NES_GUI
 
 class CPU;
+class PPU;
 class System;
 
-namespace GUI {
+class GUI
+{
+public:
 
-///////////////////////////////////////////////
-// GUI Variables                             //
-///////////////////////////////////////////////
+    GUI(){};
 
+    GLFWwindow* window = nullptr;
 
-// GUI State Variables
-extern bool show_demo_window;
-extern bool show_another_window;
-extern bool show_debug_window;
-extern float f;
-extern int counter;
-extern ImVec4 clear_color;
+    // Setup Functions (obviously hehe)
+    int SetupWindow();
+    int SetupGLEW();
+    int SetupImGui();
 
-// GLFW & GL stuff
-extern GLFWwindow* window;
-extern char* glsl_version;
+    // General Purpose Functions
+    void NewFrame();
+    void Render();
+    void PollEvents();
+    void SwapBuffers();
+    int Cleanup();
 
-///////////////////////////////////////////////
-// GUI  Functions                            //
-///////////////////////////////////////////////
+    // Functions that Build GUI
+    void ShowDemo();
+    void MainMenuBar(System* sys);
+    void CPUDebugWindow(CPU &cpu);
+    void PpuDebugWindow(PPU &ppu);
 
+protected:
 
-// Setup Functions (obviously hehe)
-int SetupWindow();
-int SetupGLEW();
-int SetupImGui();
+    bool show_demo_window = true;
+    bool show_another_window = true;
+    bool show_debug_window = true;
+    int switchDebugTabs= 0;
 
-// General Purpose Functions
-void NewFrame();
-void Render();
-void PollEvents();
-void SwapBuffers();
-int Cleanup();
+    float f = 0.0f;
+    int counter = 0;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    char* glsl_version = "#version 130";
 
-// Functions that Build GUI
-void ShowDemo();
-void MainMenuBar(System* sys);
-void CPUDebugWindow(CPU &cpu);
-}
+};
 
 #endif

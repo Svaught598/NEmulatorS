@@ -1,6 +1,7 @@
 #ifndef TYPEDEF
 #define TYPEDEF
 
+#include <sys/types.h>
 
 /**
  * Just a bunch of typedefs to make the code more succinct/readable
@@ -18,6 +19,5 @@ typedef int8_t s8;
 typedef int16_t s16;
 typedef int32_t s32;
 typedef int64_t s64;
-
 
 #endif

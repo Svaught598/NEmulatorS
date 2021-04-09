@@ -19,13 +19,17 @@ class Cart
 {
 public:
 
+    bool mirroring;
+
     Cart(Logger& newLogger);
     Cart(char *filename, Logger& newLogger);
     ~Cart();
 
     u8 read(u16 address);
     void write(u16 address, u8 data);
-
+    u8 readPPU(u16 address);
+    void writePPU(u16 address, u8 data);
+    
 private:
 
     std::unique_ptr<BasicMapper> mapper;
@@ -35,7 +39,6 @@ private:
     std::vector<u8> header;
     std::vector<u8> prgRom;
     std::vector<u8> chrRom;
-    bool mirroring;
     
     void getHeaderData(std::ifstream &ifs);
     void getRomData(std::ifstream &ifs);

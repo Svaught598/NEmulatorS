@@ -65,20 +65,20 @@ void System::setTesting(bool isTesting){
 int System::mainLoop(){
 
     // Setup Stuff
-    if (GUI::SetupWindow())
+    GUI *gui = new GUI();
+    if (gui->SetupWindow())
         return 1;
-    if (GUI::SetupGLEW())
+    if (gui->SetupGLEW())
         return 1;
-    if (GUI::SetupImGui())
+    if (gui->SetupImGui())
         return 1;
 
     // GLFW main loop
-    while (!glfwWindowShouldClose(GUI::window))
+    while (!glfwWindowShouldClose(gui->window))
     {   
-
         // GUI Events
-        GUI::PollEvents();
-        GUI::NewFrame();
+        gui->PollEvents();
+        gui->NewFrame();
 
         // System Events
         if (cartLoaded) 
@@ -87,23 +87,23 @@ int System::mainLoop(){
         // Demo Window (set by argument flag `--demo, -d`)
         if (demoMode)
         {
-            GUI::ShowDemo();    
+            gui->ShowDemo();
         }
 
         // Main GUI
         {   
-            GUI::MainMenuBar(this);
-
+            gui->MainMenuBar(this);
 
             if (cartLoaded)
-                GUI::CPUDebugWindow(*cpu);
+                gui->CPUDebugWindow(*cpu);
+                gui->PpuDebugWindow(*ppu);
         }
-        GUI::Render();
-        GUI::SwapBuffers();
+        gui->Render();
+        gui->SwapBuffers();
     }
 
     // Cleanup
-    return GUI::Cleanup();
+    return gui->Cleanup();
 }
 
 

@@ -5,6 +5,9 @@ BasicMapper::BasicMapper(u8 &_numPrgBanks, u8 &_numChrBanks)
     : numPrgBanks(_numPrgBanks), numChrBanks(_numChrBanks){}
 
 
+/* Mapper 000 */
+
+
 Mapper000::Mapper000(u8 &_numPrgBanks, u8 &_numChrBanks)
     : BasicMapper(_numPrgBanks, _numPrgBanks){}
 

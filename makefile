@@ -6,7 +6,9 @@ NES_SRCS =   	\
 	main.cpp 	\
 	system.cpp 	\
 	gui.cpp 	\
-	cart.cpp
+	cart.cpp	\
+	mappers.cpp	\
+	ppu.cpp
 NES_OBJS = $(addsuffix .o, $(basename $(notdir $(NES_SRCS))))
 
 UNAME_S := $(shell uname -s)
@@ -32,7 +34,7 @@ build: ## builds the project!
 
 valgrind: ## builds the project with compiler flags & runs valgrind
 	$(MAKE) main
-	valgrind --leak-check=full --suppressions=./val.sup --gen-suppressions=all --show-reachable=yes --log-file="val.log" -q -s ./NES -t
+	valgrind --leak-check=full --gen-suppressions=all --show-reachable=yes --log-file="val.log" -q -s ./NES -t
 
 
 clean: ## cleans up the intermediate files
